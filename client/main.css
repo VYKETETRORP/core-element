@@ -1,3 +1,5 @@
+/* Font awesome pro */
+@import  '/fonts/font_awesome/css/all.min.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

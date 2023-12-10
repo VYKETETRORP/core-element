@@ -1,0 +1,19 @@
+/* Scroll */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 7px;
+  }
+  ::-webkit-scrollbar-track-piece {
+    // background-color: #ebeef5;
+  }
+  ::-webkit-scrollbar-thumb:vertical {
+    background-color: #66b1ff;
+    border-radius: 20px;
+  }
+  ::-webkit-scrollbar-thumb:horizontal {
+    background-color: #66b1ff;
+    border-radius: 20px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #409eff;
+  }
