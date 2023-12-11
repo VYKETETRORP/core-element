@@ -5,7 +5,6 @@ import Login from "./pages/Login.vue";
 import User from "./pages/admin-settings/User.vue";
 import AdminSetting from "./pages/admin-settings/AdminSetting.vue";
 import Member from "./pages/Member.vue";
-import Report from "./"
 
 export const routes: RouteRecordRaw[] = [
   {

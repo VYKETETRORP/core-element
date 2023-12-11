@@ -9,21 +9,18 @@
     </el-tooltip>
   </div>
 </template>
-<script>
-import { ElButton, ElTooltip } from "element-plus";
-export default {
-  name: "SettingSideBar",
-  components: {
-    [ElButton.name]: ElButton,
-    [ElTooltip.name]: ElTooltip,
-  },
-  methods: {
-    handleSetting() {
-      this.$router.push({ name: "Setting" });
-    },
-  },
+<script setup lang="ts">
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+
+const router = useRouter();
+
+const handleSetting = () => {
+  router.push({ name: "Setting" });
 };
 </script>
+
 <style lang="scss" scoped>
 @import "../styles/header-menu.scss";
 

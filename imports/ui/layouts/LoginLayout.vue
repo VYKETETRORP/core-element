@@ -22,29 +22,15 @@
   </el-container>
 </template>
 
-<script>
+<script setup lang="ts">
 import moment from "moment";
-// Release version
 import release from "../release";
-// Components
 import { ElContainer, ElMain, ElRow } from "element-plus";
 
-export default {
-  name: "LoginLayout",
-  components: {
-    [ElContainer.name]: ElContainer,
-    [ElMain.name]: ElMain,
-    [ElRow.name]: ElRow,
-  },
-  data() {
-    return {
-      copyright: `© 2014-${moment().format("YYYY")}
-                    Rabbit Technology (V ${release})`,
-    };
-  },
-};
+const copyright = `© 2014-${moment().format(
+  "YYYY"
+)} Rabbit Technology (V ${release})`;
 </script>
-
 <style lang="scss" scoped>
 // Variable
 $small-screen: "only screen and (min-width: 0px) and (max-width: 1025px)";

@@ -1,3 +1,14 @@
+<template>
+  <div style="display: inline-block">
+    <el-tooltip effect="dark" content="Full Screen" placement="bottom-end">
+      <el-button link class="btn-link" @click="makeFullScreen()">
+        <template #icon>
+          <i class="far fa-expand-arrows-alt fa-lg icon-link" />
+        </template>
+      </el-button>
+    </el-tooltip>
+  </div>
+</template>
 <script setup>
 const makeFullScreen = async () => {
   const doc = window.document;
@@ -26,17 +37,6 @@ const makeFullScreen = async () => {
   }
 };
 </script>
-<template>
-  <div style="display: inline-block">
-    <el-tooltip effect="dark" content="Full Screen" placement="bottom-end">
-      <el-button link class="btn-link" @click="makeFullScreen()">
-        <template #icon>
-          <i class="far fa-expand-arrows-alt fa-lg icon-link" />
-        </template>
-      </el-button>
-    </el-tooltip>
-  </div>
-</template>
 
 <style lang="scss" scoped>
 .btn-link {
