@@ -1,13 +1,5 @@
 export const sidebarMenu = [
   {
-    title: "Members",
-    icon: "mdi-file-find",
-    route: {
-      name: "Member",
-    },
-    order: 3,
-  },
-  {
     title: "Admin Setting",
     icon: "mdi-account-cog-outline",
     children: [
@@ -37,13 +29,21 @@ export const sidebarMenu = [
     ],
     order: 2,
   },
-
-  //  {
-  //    title: "Report",
-  //    icon: "mdi-file-find",
-  //    route: {
-  //      name: "Report",
-  //    },
-  //    order: 3,
-  //  },
+  {
+    title: "Members",
+    icon: "mdi-file-find",
+    route: {
+      name: "Member",
+    },
+    order: 3,
+  },
+  {
+    title: "Report",
+    icon: "mdi-file-find",
+    route: {
+      name: "Report",
+    },
+    order: 3,
+  },
 ];
+export default sidebarMenu;

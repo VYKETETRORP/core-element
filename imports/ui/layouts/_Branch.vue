@@ -67,7 +67,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../style/header-menu.scss";
+@import "../styles/header-menu.scss";
 .current-branch {
   text-transform: uppercase;
 }

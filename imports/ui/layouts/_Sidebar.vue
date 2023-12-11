@@ -56,6 +56,23 @@
               <template #reference>
                 <span>
                   <el-menu-item
+                    :index="item.route ? item.route.name + '-index' : null"
+                    :class="{
+                      'is-active': checkActiveParentClass(item),
+                      'is-parent': true,
+                    }"
+                    @click="handleMenuClick({ route: item.route })"
+                  >
+                    <div class="icon-wrapper">
+                      <i :class="item.icon" />
+                    </div>
+                    <span>{{ item.title }}</span>
+                  </el-menu-item>
+                </span>
+              </template>
+              <!--<template #reference>
+                <span>
+                  <el-menu-item
                     :index="item.route.name + '-index'"
                     :class="{
                       'is-active': checkActiveParentClass(item),
@@ -73,7 +90,7 @@
                     <span>{{ item.title }}</span>
                   </el-menu-item>
                 </span>
-              </template>
+              </template>-->
             </el-popover>
             <!-- Menu without sub items -->
             <template v-else-if="item.title">
@@ -152,7 +169,7 @@ const menu = ref<any[]>([
     icon: "fal fa-tachometer-fastest",
     route: { name: "Dashboard" },
   },
-  //  ...sidebarMenu,
+  ...sidebarMenu,
   {
     title: "Setting",
     icon: "fal fa-cog",
@@ -161,6 +178,7 @@ const menu = ref<any[]>([
     },
   },
 ]);
+
 const sidebarMenuItems = computed(() => {
   return menu.value;
 });
@@ -206,11 +224,15 @@ watch(
 );
 
 const checkActiveParentClass = (item: any) => {
-  // on click item
-  if (route.name == item.route.name && activeParent.value == item.route.name) {
+  if (
+    item.route &&
+    route.name === item.route.name &&
+    activeParent.value === item.route.name
+  ) {
+    // On click item
     return true;
-  } // on click sub item
-  else if (activeParent.value == item.route.name) {
+  } else if (activeParent.value === item.route?.name) {
+    // On click sub item
     return true;
   }
   return false;
@@ -262,89 +284,6 @@ const handleMenuClick = ({ route }: any) => {
 </style>
 
 <style lang="scss" scoped>
-//.sidebar-popover {
-//  padding: 0px !important;
-//  margin-top: 0px;
-//  padding: 8px 0 !important;
-//  .el-menu-item {
-//    font-weight: 500;
-//    font-size: 14px;
-//    text-transform: capitalize;
-//    border-radius: 4px;
-//    margin: 0px 8px 8px 8px;
-//    padding-left: 16px !important;
-//    height: 40px;
-//    line-height: 40px;
-//    &:last-of-type {
-//      margin-top: 8px;
-//      margin-bottom: 0px;
-//    }
-//    &:focus,
-//    &:hover {
-//      // background-color: rgba(17, 17, 29, 255);
-//      background: linear-gradient(-60deg, #065abf, #489ddd);
-//      color: #ffffff;
-//    }
-//    // Active menu item
-//    &.is-active {
-//      // background-color: rgba(17, 17, 29, 255);
-//      background: linear-gradient(-60deg, #065abf, #489ddd);
-//      color: #ffffff;
-//    }
-//  }
-//}
-
-//.sidebar {
-//  position: relative;
-//  width: auto !important;
-//  background-color: rgba(17, 17, 29, 255);
-//  overflow: hidden;
-//  .sidebar-header {
-//    position: relative;
-//    display: flex;
-//    flex-flow: row nowrap;
-//    align-items: center;
-//    justify-content: left;
-//    min-height: 59px;
-//    line-height: 59px;
-//    background-color: rgba(17, 17, 29, 255);
-//    color: #ffff;
-//    font-size: 16px;
-//    border: 0;
-//    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-//    border-radius: 0;
-//    padding: 0 20px;
-//    i {
-//      font-size: 22px;
-//      line-height: 1;
-//      z-index: 1;
-//      background-color: rgba(17, 17, 29, 255);
-//    }
-//    .header-title {
-//      position: absolute;
-//      margin-left: 22px;
-//      padding-left: 16px;
-//      line-height: 1;
-//      font-size: 18px;
-//      font-weight: 600;
-//      letter-spacing: 1px;
-//      display: block;
-//      transition: transform 0.3s ease-in, opacity 0.3s ease-in;
-//      opacity: 1;
-//      transform: translateZ(0);
-//      &.is-hidden {
-//        opacity: 0;
-//        transform: translate3d(-25px, 0, 0);
-//      }
-//    }
-//  }
-//  &.--mini {
-//    i {
-//      margin-right: 0px;
-//    }
-//  }
-//}
-
 .sidebar {
   position: relative;
   width: auto !important;
@@ -394,7 +333,6 @@ const handleMenuClick = ({ route }: any) => {
     }
   }
 }
-
 .sidebar-menu {
   position: relative;
   height: calc(100vh - 175px);

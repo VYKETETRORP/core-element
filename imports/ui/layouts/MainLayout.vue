@@ -80,7 +80,7 @@
             @scroll="startScroll"
           >
             <div class="content">
-              <!-- Global Alert -->
+              <!--Global Alert -->
               <!--<el-alert
                 v-if="alert.visible"
                 show-icon
@@ -92,14 +92,8 @@
                   {{ alert.title }}
                 </template>
               </el-alert>-->
-              <!--
-              <router-view v-slot="{ Component, route }">
-                <transition name="fade" mode="out-in">
-                  <keep-alive :include="cachedViews" :max="maxCache">
-                    <component :is="Component" :key="getRouterKey(route)" />
-                  </keep-alive>
-                </transition>
-              </router-view>-->
+
+              <router-view> </router-view>
             </div>
 
             <!-- Footer -->
@@ -245,13 +239,13 @@ watch(
   { immediate: true }
 );
 // Methods
-//const getRouterKey = (_route: RouteLocationNormalizedLoaded) => {
-//  const visitedRoute =
-//    store.state.app.tagView.visitedViews?.find(
-//      (el: RouteLocationNormalizedLoaded) => el.fullPath == _route.fullPath
-//    ) || _route;
-//  return visitedRoute.fullPath + (visitedRoute.meta?.cacheKey || "");
-//};
+const getRouterKey = (_route: RouteLocationNormalizedLoaded) => {
+  const visitedRoute =
+    store.state.app.tagView.visitedViews?.find(
+      (el: RouteLocationNormalizedLoaded) => el.fullPath == _route.fullPath
+    ) || _route;
+  return visitedRoute.fullPath + (visitedRoute.meta?.cacheKey || "");
+};
 const collapseSidebar = () => {
   store.dispatch("app/sidebar/collapseSidebar", !isCollapseSidebar.value);
 };

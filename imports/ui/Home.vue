@@ -19,5 +19,5 @@ import Hello from "./Hello.vue";
 import Info from "./Info.vue";
 </script>
 <style lang="scss">
-@import "./style/index.scss";
+@import "./styles/index.scss";
 </style>

@@ -1,7 +1,7 @@
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 /* style */
-import "/imports/ui/style/main.scss";
+import "/imports/ui/styles/main.scss";
 import notify from "./plugins/notify";
 import { store } from "./store";
 import { App as Application } from 'vue'

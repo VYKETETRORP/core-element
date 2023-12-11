@@ -43,7 +43,7 @@ import {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/header-menu.scss";
+@import "../styles/header-menu.scss";
 .btn-link {
   color: #303133 !important;
   &:hover {

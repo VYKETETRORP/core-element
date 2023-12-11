@@ -4,6 +4,8 @@ import Profile from "./pages/admin-settings/Profile.vue";
 import Login from "./pages/Login.vue";
 import User from "./pages/admin-settings/User.vue";
 import AdminSetting from "./pages/admin-settings/AdminSetting.vue";
+import Member from "./pages/Member.vue";
+import Report from "./"
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -14,6 +16,22 @@ export const routes: RouteRecordRaw[] = [
       title: "Dashboard",
     },
   },
+  {
+    path: "/members",
+    name: "Member",
+    component: Member,
+    meta: {
+      title: "Members",
+    },
+  },
+//  {
+//    path: "/report",
+//    name: "Report",
+//    component: Report,
+//    meta: {
+//      title: "Dashboard",
+//    },
+//  },
   {
     path: "/admin-setting",
     name: "AdminSetting",
