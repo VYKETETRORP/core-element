@@ -8,87 +8,73 @@
     />
   </el-dialog>
 </template>
-<script>
+<script setup lang="ts">
 import _ from "lodash";
-
-// Component
+import { ref, computed, nextTick } from "vue";
 import { ElDialog } from "element-plus";
-export default {
-  name: "Dialog1",
 
-  components: {
-    [ElDialog.name]: ElDialog,
-  },
+const dialogVisible = ref(false);
+const currentDialog = ref(null);
+const updateId = ref(null);
+const updateDoc = ref(null);
+const parentAttrs = ref({});
+let resolve = null;
+let reject = null;
 
-  data() {
-    return {
-      dialogVisible: false,
-      currentDialog: null,
-      // Child props
-      updateId: null,
-      updateDoc: null,
-      // Options
-      parentAttrs: {},
-      // Return promise
-      resolve: null,
-      reject: null,
-    };
-  },
+const childProps = computed(() => ({
+  isDialog: true,
+  updateId: updateId.value,
+  updateDoc: updateDoc.value,
+}));
 
-  computed: {
-    childProps() {
-      let props = {
-        isDialog: true,
-        updateId: this.updateId,
-        updateDoc: this.updateDoc,
-      };
-      return props;
-    },
-  },
+const open = ({
+  component,
+  updateId = null,
+  updateDoc = null,
+  attrs = null,
+}) => {
+  // Open dialog
+  dialogVisible.value = true;
 
-  methods: {
-    open({ component, updateId = null, updateDoc = null, attrs = null }) {
-      // Open modal
-      this.dialogVisible = true;
+  // Child props
+  updateId.value = updateId;
+  updateDoc.value = updateDoc;
 
-      // Child props
-      this.updateId = updateId;
-      this.updateDoc = updateDoc;
+  // Parent options
+  parentAttrs.value = attrs;
+  parentAttrs.value = _.defaults(parentAttrs.value, {
+    title: "Dialog",
+    fullscreen: true,
+  });
 
-      // Parent Options
-      this.parentAttrs = attrs;
-      this.parentAttrs = _.defaults(this.parentAttrs, {
-        title: "Dialog",
-        fullscreen: true,
-      });
+  nextTick(() => {
+    currentDialog.value = component;
+  });
 
-      this.$nextTick(() => {
-        this.currentDialog = component;
-      });
-      // Promise fuction
-      return new Promise((resolve, reject) => {
-        this.resolve = resolve;
-        this.reject = reject;
-      });
-    },
-    handleFormSave(result) {
-      // Return resolve
-      this.resolve(result);
-      // Close Modal
-      this.dialogVisible = false;
-      this.$nextTick(() => {
-        this.currentDialog = null;
-      });
-    },
-    handleDialogClose() {
-      // Return resolve
-      this.resolve(result);
-      // Close Modal
-      this.dialogVisible = false;
-      this.$nextTick(() => {
-        this.currentDialog = null;
-      });
-    },
-  },
+  // Return promise
+  return new Promise((_resolve, _reject) => {
+    resolve = _resolve;
+    reject = _reject;
+  });
+};
+
+const handleFormSave = (result) => {
+  // Return resolve
+  resolve(result);
+  // Close dialog
+  dialogVisible.value = false;
+  nextTick(() => {
+    currentDialog.value = null;
+  });
+};
+
+const handleDialogClose = () => {
+  // Return resolve
+  resolve(false);
+  // Close dialog
+  dialogVisible.value = false;
+  nextTick(() => {
+    currentDialog.value = null;
+  });
 };
 </script>

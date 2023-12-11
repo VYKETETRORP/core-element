@@ -11,92 +11,72 @@
     </el-drawer>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import _ from "lodash";
-
-// Component
+import { ref, computed, nextTick } from "vue";
 import { ElDrawer } from "element-plus";
-export default {
-  name: "Drawer",
 
-  components: {
-    [ElDrawer.name]: ElDrawer,
-  },
+const drawerVisible = ref(false);
+const currentDrawer = ref(null);
+const updateId = ref(null);
+const updateDoc = ref(null);
+const parentAttrs = ref({});
+let resolve = null;
+let reject = null;
 
-  data() {
-    return {
-      drawerVisible: false,
-      currentDrawer: null,
-      // Child props
-      updateId: null,
-      updateDoc: null,
-      // Options
-      parentAttrs: {},
-      // Return promise
-      resolve: null,
-      reject: null,
-    };
-  },
+const childProps = computed(() => ({
+  isDrawer: true,
+  updateId: updateId.value,
+  updateDoc: updateDoc.value,
+}));
 
-  computed: {
-    childProps() {
-      let props = {
-        isDrawer: true,
-        updateId: this.updateId,
-        updateDoc: this.updateDoc,
-      };
-      return props;
-    },
-  },
+const open = ({
+  component,
+  updateId = null,
+  updateDoc = null,
+  attrs = null,
+}) => {
+  // Open drawer
+  drawerVisible.value = true;
 
-  methods: {
-    open({ component, updateId = null, updateDoc = null, attrs = null }) {
-      // Open modal
-      this.drawerVisible = true;
+  // Child props
+  updateId.value = updateId;
+  updateDoc.value = updateDoc;
 
-      // Child props
-      this.updateId = updateId;
-      this.updateDoc = updateDoc;
+  // Parent options
+  parentAttrs.value = _.defaults(attrs, {
+    title: "Drawer",
+    direction: "rtl",
+  });
 
-      // Parent Options
-      this.parentAttrs = attrs;
-      this.parentAttrs = _.defaults(this.parentAttrs, {
-        title: "Drawer",
-        direction: "rtl",
-      });
-      // this.width = width
-      this.$nextTick(() => {
-        this.currentDrawer = component;
-      });
+  nextTick(() => {
+    currentDrawer.value = component;
+  });
 
-      // Promise fuction
-      return new Promise((resolve, reject) => {
-        this.resolve = resolve;
-        this.reject = reject;
-      });
-    },
+  // Return promise
+  return new Promise((_resolve, _reject) => {
+    resolve = _resolve;
+    reject = _reject;
+  });
+};
 
-    // Form save
-    handleFormSave(result) {
-      // Return resolve
-      this.resolve(result);
-      // Close Modal
-      this.drawerVisible = false;
-      this.$nextTick(() => {
-        this.currentDrawer = null;
-      });
-    },
+const handleFormSave = (result) => {
+  // Return resolve
+  resolve(result);
+  // Close drawer
+  drawerVisible.value = false;
+  nextTick(() => {
+    currentDrawer.value = null;
+  });
+};
 
-    // Model close
-    handleDrawerClose() {
-      // Return resolve
-      this.resolve(false);
-      // Close Modal
-      this.drawerVisible = false;
-      this.$nextTick(() => {
-        this.currentDrawer = null;
-      });
-    },
-  },
+const handleDrawerClose = () => {
+  // Return resolve
+  resolve(false);
+  // Close drawer
+  drawerVisible.value = false;
+  nextTick(() => {
+    currentDrawer.value = null;
+  });
 };
 </script>
