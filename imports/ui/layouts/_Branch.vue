@@ -3,7 +3,7 @@
     <el-dropdown trigger="click" class="header-item" @command="handleCommand">
       <el-button link class="btn-link">
         <template #icon>
-          <i class="fa fa-sitemap"></i>
+          <i class="far fa-sitemap fa-lg icon-link" />
         </template>
         Branch A
       </el-button>

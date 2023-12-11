@@ -17,7 +17,7 @@
             :is-collapse="isCollapseSidebar"
             @click="collapseSidebar()"
           />
-          <Breadcrumb />
+          <div class="breadcrumb"><Breadcrumb /></div>
         </div>
 
         <div class="content-right">
@@ -45,7 +45,7 @@
 
       <!-- Main -->
       <el-main class="main">
-        <!--<TagView />-->
+        <TagView />
         <div>
           <div
             class="scroll"
@@ -139,7 +139,7 @@ import Breadcrumb from "./_Breadcrumb.vue";
 import TagView from "./_TagView.vue";
 import Branch from "./_Branch.vue";
 import Notification from "./_Notification.vue";
-//import Sidebar from "./_Sidebar.vue";
+import Sidebar from "./_Sidebar.vue";
 import Dialog from "./../components/Dialog.vue";
 import Drawer from "./../components/Drawer.vue";
 import SettingSideBar from "./_Setting.vue";

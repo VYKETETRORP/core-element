@@ -8,7 +8,8 @@
       <span v-if="bc.icon">
         <i :class="bc.icon" />
       </span>
-      {{ bc.title }}
+      <!--{{ bc.title }}-->
+      {{ $t(`breadcrumb.${bc.title}`) }}
     </el-breadcrumb-item>
   </el-breadcrumb>
 </template>
