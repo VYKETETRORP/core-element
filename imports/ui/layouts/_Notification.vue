@@ -5,7 +5,11 @@
         <el-badge :value="12" is-dot class="badge-item">
           <el-button link class="btn-link">
             <template #icon>
-              <i class="fas fa-bell fa-lg icon-link" />
+              <!--<i class="fas fa-bell fa-lg icon-link" />-->
+              <!--<i class="far fa-bell" />-->
+              <!--<i class="fa-regular fa-bell"></i>-->
+              <!--<i class="fa-sharp fa-solid fa-bell"></i>-->
+              <i class="far fa-bell fa-lg" />
             </template>
           </el-button>
         </el-badge>

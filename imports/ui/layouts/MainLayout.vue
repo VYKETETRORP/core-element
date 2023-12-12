@@ -412,8 +412,9 @@ const { copyright, isScrollActive } = toRefs(state);
       color: #606266;
 
       img {
-        max-height: 100%;
-        width: 22px;
+        //max-height: 100%;
+        height: 24px;
+        width: 24px;
         margin-top: -4px;
         cursor: pointer;
       }

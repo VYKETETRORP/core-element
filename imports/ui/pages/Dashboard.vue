@@ -42,8 +42,16 @@
 
 <script>
 import { ElCard } from "element-plus";
-import AccChart from "../components/AccChart";
-import BoxInfo from "../components/box-info";
+//  import AccChart from '../components/AccChart'
+//  import BoxInfo from '../components/box-info'
+//import AccChat from "../components/dashboard/AccChart";
+//import BoxInfo from "../components/dashboard/box-info";
+//import AccChart from "@/layouts/dashboard/AccChart";
+//import BoxInfo from "@/layouts/dashboard/box-info";
+
+import AccChart from "../components/dashboard/AccChart.vue";
+
+import BoxInfo from "../components/dashboard/box-info.vue";
 
 export default {
   name: "Dashboard",
@@ -66,7 +74,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "./imports/client/styles/main.scss";
+//@import "./styles/main.scss";
+/*@import './imports/client/styles/main.scss';*/
 
 .company-heading {
   font-weight: 700;

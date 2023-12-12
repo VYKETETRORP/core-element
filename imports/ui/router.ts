@@ -1,16 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "./Home.vue";
+//import Home from "./Home.vue";
 import Profile from "./pages/admin-settings/Profile.vue";
 import Login from "./pages/Login.vue";
 import User from "./pages/admin-settings/User.vue";
 import AdminSetting from "./pages/admin-settings/AdminSetting.vue";
 import Member from "./pages/Member.vue";
+import Dashboard from "./pages/Dashboard.vue"
 
 export const routes: RouteRecordRaw[] = [
   {
     path: "/",
     name: "Dashboard",
-    component: Home,
+    component: Dashboard,
     meta: {
       title: "Dashboard",
     },
