@@ -1,5 +1,5 @@
-<template>
-  <el-breadcrumb separator="/">
+<template class="kh-battambang">
+  <el-breadcrumb separator="/" class="kh-battambang">
     <el-breadcrumb-item
       v-for="(bc, index) in breadcrumbs"
       :key="`bc-${index}`"

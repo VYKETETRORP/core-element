@@ -2,6 +2,7 @@ export default {
   Dashboard: "ផ្ទាំងគ្រប់គ្រង",
   Accounting: "គណនេយ្យ",
   Company: "ក្រុមហ៊ុន",
+  Members: "សមាជិក",
   // SubMenu
   "Make Journal": "បង្កើតទិនានុប្បវត្តិ",
   "Chart of Account": "គណនីគំនូសតាង",

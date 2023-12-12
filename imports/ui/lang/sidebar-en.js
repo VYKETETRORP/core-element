@@ -2,6 +2,7 @@ export default {
   Dashboard: "Dashboard",
   Accounting: "Accounting",
   Company: "Company",
+  Members: "Members",
   // SubMenu
   "Make Journal": "Create Journal",
   "Chart of Account": "Chart of Account",

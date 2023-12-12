@@ -1,4 +1,4 @@
-<template>
+<template class="kh-battambang">
   <div>members</div>
 </template>
 

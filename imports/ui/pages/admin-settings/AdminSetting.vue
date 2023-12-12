@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="16">
       <el-col :xs="8" :sm="7" :md="5">
-        <el-card shadow="never" class="card-overflow">
+        <el-card shadow="never" class="card-overflow kh-battambang">
           <!-- Item Table -->
           <el-menu :default-active="activeCom" class="menu-setting">
             <template v-for="(menu, key) in menuItems" :key="key">

@@ -1,4 +1,4 @@
-<template>
+<template class="kh-battambang">
   <h1 class="text-3xl font-bold my-6">Welcome to Meteor!</h1>
   <Hello />
   <Info />

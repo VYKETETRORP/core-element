@@ -1,4 +1,4 @@
-<template>
+<template class="kh-battambang">
   <el-aside :class="['sidebar', isCollapse ? '--mini' : '']">
     <section class="sidebar-header">
       <img
@@ -12,7 +12,7 @@
       />
     </section>
 
-    <section class="sidebar-new">
+    <section class="sidebar-new kh-battambang">
       <section :class="{ 'sidebar-menu': true }">
         <el-menu
           :collapse="isCollapse"
@@ -49,7 +49,8 @@
                     })
                   "
                 >
-                  {{ child.title }}
+                  {{ $t(`sidebar.${child.title}`) }}
+                  <!--{{ child.title }}-->
                 </el-menu-item>
               </template>
               <!-- Parent -->
@@ -66,7 +67,8 @@
                     <div class="icon-wrapper">
                       <i :class="item.icon" />
                     </div>
-                    <span>{{ item.title }}</span>
+
+                    <span> {{ $t(`sidebar.${item.title}`) }}</span>
                   </el-menu-item>
                 </span>
               </template>
@@ -107,7 +109,7 @@
                 </div>
                 <template #title>
                   <span>
-                    {{ item.title }}
+                    {{ $t(`sidebar.${item.title}`) }}
                   </span>
                 </template>
               </el-menu-item>

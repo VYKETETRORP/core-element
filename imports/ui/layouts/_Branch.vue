@@ -1,4 +1,4 @@
-<template>
+<template class="kh-battambang">
   <el-tooltip effect="dark" content="Branch" placement="bottom-end">
     <el-dropdown trigger="click" class="header-item" @command="handleCommand">
       <el-button link class="btn-link">

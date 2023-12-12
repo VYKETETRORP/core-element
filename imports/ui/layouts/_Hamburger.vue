@@ -22,7 +22,7 @@ watch(
 );
 </script>
 
-<template>
+<template class="kh-battambang">
   <div class="hamburger" :class="{ open: toggled }">
     <span />
     <span />
