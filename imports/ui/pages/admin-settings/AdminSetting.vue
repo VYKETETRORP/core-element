@@ -50,8 +50,10 @@ import { defineAsyncComponent } from "vue";
 import _ from "lodash";
 
 import UserProfile from "./Profile.vue";
+
 // Component
 import { ElCard, ElRow, ElCol, ElMenu, ElMenuItem } from "element-plus";
+import User from './User.vue';
 
 export default {
   name: "AdminSetting",
@@ -62,6 +64,7 @@ export default {
     [ElMenu.name]: ElMenu,
     [ElMenuItem.name]: ElMenuItem,
     UserProfile,
+    User,
     //Modules: defineAsyncComponent(() => import("./ModuleForm")),
     //Exchange: defineAsyncComponent(() => import("./Exchange")),
   },

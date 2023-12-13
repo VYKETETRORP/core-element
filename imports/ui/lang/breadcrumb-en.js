@@ -6,6 +6,7 @@ export default {
   Dashboard: "Dashboard",
   Setting: "Settings",
   "Admin Setting": "Admin Setting",
+  Members:"Members",
 
   Reports: "Reports",
   "Demo Page": "Demo Page",

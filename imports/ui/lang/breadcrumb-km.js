@@ -4,6 +4,7 @@ export default {
   Login: "ចូល",
   Confirm: "បញ្ជាក់",
   Dashboard: "ផ្ទាំងពត៌មាន",
+  Members:"សមាជិក",
   Setting: "ការកំណត់",
   "Admin Setting": "ការកំណត់ផ្នែកមេ",
   Reports: "របាយការណ៍",
