@@ -53,7 +53,7 @@ import UserProfile from "./Profile.vue";
 
 // Component
 import { ElCard, ElRow, ElCol, ElMenu, ElMenuItem } from "element-plus";
-import User from './User.vue';
+import User from "./User.vue";
 
 export default {
   name: "AdminSetting",
@@ -65,6 +65,11 @@ export default {
     [ElMenuItem.name]: ElMenuItem,
     UserProfile,
     User,
+
+    //RoleGroup,
+    RoleGroup: defineAsyncComponent(() => import("./RoleGroup.vue")),
+    //RoleGroup: defineAsyncComponent(() => import("./RoleGroup")),
+
     //Modules: defineAsyncComponent(() => import("./ModuleForm")),
     //Exchange: defineAsyncComponent(() => import("./Exchange")),
   },
@@ -79,6 +84,7 @@ export default {
           icon: "fal fa-user-circle",
           component: "UserProfile",
         },
+
         {
           title: "Modules",
           icon: "fal fa-sitemap",

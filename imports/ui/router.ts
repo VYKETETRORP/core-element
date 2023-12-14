@@ -1,3 +1,6 @@
+
+//sideMenu //sidebar
+
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 //import Home from "./Home.vue";
 import Profile from "./pages/admin-settings/Profile.vue";
@@ -5,7 +8,8 @@ import Login from "./pages/Login.vue";
 import User from "./pages/admin-settings/User.vue";
 import AdminSetting from "./pages/admin-settings/AdminSetting.vue";
 import Member from "./pages/Member.vue";
-import Dashboard from "./pages/Dashboard.vue"
+import Customer from "./pages/Customer.vue";
+import Dashboard from "./pages/Dashboard.vue";
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -43,6 +47,7 @@ export const routes: RouteRecordRaw[] = [
       },
     },
   },
+ 
   {
     path: "/profile",
     name: "Profile",
@@ -55,6 +60,22 @@ export const routes: RouteRecordRaw[] = [
       },
     },
   },
+
+  {
+    path: "/create-customer",
+    name: "Customer",
+    component: Customer,
+    meta: {
+      title: "Create Customer",
+      linkActive: "AdminSetting",
+      breadcrumb: {
+        parent: "AdminSetting",
+      },
+    },
+  },
+
+
+
   {
     path: "/user",
     name: "User",

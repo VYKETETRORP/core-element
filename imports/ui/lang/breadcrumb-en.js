@@ -5,8 +5,9 @@ export default {
   Confirm: "Confirm",
   Dashboard: "Dashboard",
   Setting: "Settings",
+  "Create Customer": "Create Customer",
   "Admin Setting": "Admin Setting",
-  Members:"Members",
+  Members: "Members",
 
   Reports: "Reports",
   "Demo Page": "Demo Page",

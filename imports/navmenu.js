@@ -12,6 +12,13 @@ export const sidebarMenu = [
     icon: "mdi-account-cog-outline",
     children: [
       {
+        title: "Create Customer",
+        icon: "mdi-card-account-details",
+        route: {
+          name: "Customer",
+        },
+      },
+      {
         title: "Profile",
         icon: "mdi-card-account-details",
         route: {

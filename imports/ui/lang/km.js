@@ -80,4 +80,27 @@ export default {
     Telephone: "ទូរស័ព្ទ",
     Email: "អ៊ីម៉ែល",
   },
+
+  ///sidebar
+
+  customer: {
+    "Register Date": "កាលបរិច្ឆេទចុះឈ្មោះ",
+    Code: "កូដ",
+    "Customer Type": "ប្រភេទអតិថិជន",
+    "Short Name": "Short Name",
+    Name: "ឈ្មោះ",
+    Employee: "បុគ្គលិក",
+    Status: "ស្ថានភាព",
+    "Default Price": "តម្លៃដើម",
+    Warehouse: "ឃ្លាំង",
+    Memo: "បរិយាយ",
+    Contact: "ទំនាក់ទំនង",
+    Payment: "ការទូទាត់",
+    Account: "គណនី",
+    "Account Receivable": "គណនីត្រូវទទួល",
+    " Deposit Account": "គណនី​ប្រាក់​បញ្ញើរ",
+    "Cash Account": "គណនីសាច់ប្រាក់",
+    "Trade Discount": "បញ្ចុះតម្លៃទិញ ឬលក់",
+    " Settlement Discount": "បញ្ចុះតម្លៃសង ឬបង់ប្រាក់",
+  },
 };

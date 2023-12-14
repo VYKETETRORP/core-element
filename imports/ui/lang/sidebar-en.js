@@ -3,6 +3,7 @@ export default {
   Accounting: "Accounting",
   Company: "Company",
   Members: "Members",
+  "Create Customer": "Create Customer",
   // SubMenu
   "Make Journal": "Create Journal",
   "Chart of Account": "Chart of Account",

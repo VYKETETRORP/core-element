@@ -12,7 +12,7 @@
       <Drawer ref="drawer" />
 
       <el-header class="header clearfix">
-        <div class="content-left">
+        <div class="content-left kh-battambang">
           <Hamburger
             :is-collapse="isCollapseSidebar"
             @click="collapseSidebar()"

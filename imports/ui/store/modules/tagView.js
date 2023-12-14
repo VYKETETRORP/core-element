@@ -22,6 +22,7 @@
 //};
 //import router from "/imports/router";
 //import router from ".../router";
+import { router } from "/imports/ui/router.ts";
 
 const homeView = {
   path: "/",

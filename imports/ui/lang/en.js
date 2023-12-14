@@ -80,4 +80,27 @@ export default {
     Telephone: "Telephone",
     Email: "Email",
   },
+
+  ///sidebar
+
+  customer: {
+    "Register Date": "Register Date",
+    Code: "Code",
+    "Customer Type": "Customer Type",
+    "Short Name": "Short Name",
+    Name: "Name",
+    Employee: "Employee",
+    Status: "Status",
+    "Default Price": "Default Price",
+    Warehouse: "Warehouse",
+    Memo: "Memo",
+    Contact: "Contact",
+    Payment: "Payment",
+    Account: "Account",
+    "Account Receivable": "Account Receivable",
+    " Deposit Account": "Deposit Account",
+    "Cash Account": "Cash Account",
+    "Trade Discount": "Trade Discount",
+    " Settlement Discount": "Settlement Discount",
+  },
 };
