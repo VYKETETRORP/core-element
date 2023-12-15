@@ -82,10 +82,12 @@ export default {
   },
 
   ///sidebar
-
+  //Create customer
   customer: {
+    Customer: "Customer",
     "Register Date": "Register Date",
-    Code: "Code",
+    refNo: "Code",
+    Date: "Date",
     "Customer Type": "Customer Type",
     "Short Name": "Short Name",
     Name: "Name",
@@ -94,13 +96,49 @@ export default {
     "Default Price": "Default Price",
     Warehouse: "Warehouse",
     Memo: "Memo",
+    Profile: "Profile",
+    //"Shop Banner":"Shop Banner"
     Contact: "Contact",
     Payment: "Payment",
     Account: "Account",
+    Telephone: "Telephone",
+    Email: "Email",
+    Geography: "Geography",
+    Address: "Address",
+    Location: "Location",
+    Map: "Map",
+    "Billing Address": "Billing Address",
+    "Delivery Address": "Delivery Address",
+    "Payment Term": "Payment Term",
+    Target: "Target",
+    "Credit Limit": "Credit Limit",
+
     "Account Receivable": "Account Receivable",
     " Deposit Account": "Deposit Account",
     "Cash Account": "Cash Account",
     "Trade Discount": "Trade Discount",
-    " Settlement Discount": "Settlement Discount",
+    "Settlement Discount": "Settlement Discount",
+  },
+
+  //Sale Order
+
+  saleOrder: {
+    code: "Id",
+    " Ref No": "Ref No",
+    Date: "Date",
+    Customer: "Customer",
+    Info: "Info",
+    "Expect Date": "Expect Date",
+    Employee: "Employee",
+    "Deposit Amount": "Deposit Amount",
+    "Cash Account": "Email",
+    Item: "Item",
+    NO: "NO",
+    ITEM: "ITEM",
+    MEMO: "MEMO",
+    QTY: "QTY",
+    UOM: "UOM",
+    PRICE: "PRICE",
+    AMOUNT: "AMOUNT",
   },
 };

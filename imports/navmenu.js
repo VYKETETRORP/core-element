@@ -19,6 +19,13 @@ export const sidebarMenu = [
         },
       },
       {
+        title: "Create Sale Order",
+        icon: "mdi-card-account-details",
+        route: {
+          name: "SaleOrder",
+        },
+      },
+      {
         title: "Profile",
         icon: "mdi-card-account-details",
         route: {

@@ -4,6 +4,7 @@ export default {
   Company: "ក្រុមហ៊ុន",
   Members: "សមាជិក",
   "Create Customer": "អតិថិជនថ្មី",
+  "Create Sale Order": "បង្កើតការបញ្ជាលក់",
   // SubMenu
   "Make Journal": "បង្កើតទិនានុប្បវត្តិ",
   "Chart of Account": "គណនីគំនូសតាង",

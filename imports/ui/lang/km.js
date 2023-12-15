@@ -84,11 +84,15 @@ export default {
   ///sidebar
 
   customer: {
+    Customer: "អតិថិជន",
     "Register Date": "កាលបរិច្ឆេទចុះឈ្មោះ",
-    Code: "កូដ",
+    refNo: "កូដ",
+    Date: "Date",
     "Customer Type": "ប្រភេទអតិថិជន",
     "Short Name": "Short Name",
     Name: "ឈ្មោះ",
+    Profile: "Profile",
+
     Employee: "បុគ្គលិក",
     Status: "ស្ថានភាព",
     "Default Price": "តម្លៃដើម",
@@ -97,10 +101,44 @@ export default {
     Contact: "ទំនាក់ទំនង",
     Payment: "ការទូទាត់",
     Account: "គណនី",
+
+    Telephone: "លេខទូរស័ព្ទ",
+    Email: "អ៉ីម៉ែល",
+    Geography: "ភូមិសាស្ត្រ",
+    Address: "អាសយដ្ឋាន",
+    Location: "ទីតាំង",
+    Map: "ទីតាំងផែនទី",
+    "Billing Address": "អាសយដ្ឋានវិក្កយបត្រ",
+    "Delivery Address": "អាសយ​ដ្ឋាន​សំរាប់​ការ​ដឹកជញ្ជូន",
+    "Payment Term": "រយៈពេលទូទាត់",
+    Target: "Target",
+    "Credit Limit": "ដែនកំណត់ជំពាក់ប្រាក់",
     "Account Receivable": "គណនីត្រូវទទួល",
     " Deposit Account": "គណនី​ប្រាក់​បញ្ញើរ",
     "Cash Account": "គណនីសាច់ប្រាក់",
     "Trade Discount": "បញ្ចុះតម្លៃទិញ ឬលក់",
-    " Settlement Discount": "បញ្ចុះតម្លៃសង ឬបង់ប្រាក់",
+    "Settlement Discount": "បញ្ចុះតម្លៃសង ឬបង់ប្រាក់",
+  },
+
+  // SALE ORDER
+
+  saleOrder: {
+    code: "Id",
+    " Ref No": "លេខយោង",
+    Date: "កាលបរិច្ឆេទ",
+    Customer: "អតិថិជន",
+    Info: "ពត៌មាន",
+    "Expect Date": "កាលបរិច្ឆេទរំពឹងទុក",
+    Employee: "បុគ្គលិក",
+    "Deposit Amount": "ចំនួនប្រាក់បញ្ញើរ",
+    "Cash Account": "គណនីសាច់ប្រាក់",
+    Item: "ទំនិញ:",
+    NO: "លរ",
+    ITEM: "ទំនិញ",
+    MEMO: "បរិយាយ",
+    QTY: "បរិមាណ",
+    UOM: "ឯកតា",
+    PRICE: "តម្លៃ",
+    AMOUNT: "ចំនួនទឹកប្រាក់",
   },
 };

@@ -6,6 +6,8 @@ export default {
   Dashboard: "Dashboard",
   Setting: "Settings",
   "Create Customer": "Create Customer",
+  "Create Sale Order": "Create Sale Order",
+
   "Admin Setting": "Admin Setting",
   Members: "Members",
 

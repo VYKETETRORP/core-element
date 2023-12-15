@@ -6,6 +6,8 @@ export default {
   Dashboard: "ផ្ទាំងពត៌មាន",
   Members: "សមាជិក",
   "Create Customer": "អតិថិជនថ្មី",
+  "Create Sale Order": "បង្កើតការបញ្ជាលក់",
+
   Setting: "ការកំណត់",
   "Admin Setting": "ការកំណត់ផ្នែកមេ",
   Reports: "របាយការណ៍",

@@ -9,6 +9,7 @@ import User from "./pages/admin-settings/User.vue";
 import AdminSetting from "./pages/admin-settings/AdminSetting.vue";
 import Member from "./pages/Member.vue";
 import Customer from "./pages/Customer.vue";
+import SaleOrder from "./pages/SaleOrder.vue"
 import Dashboard from "./pages/Dashboard.vue";
 
 export const routes: RouteRecordRaw[] = [
@@ -62,11 +63,24 @@ export const routes: RouteRecordRaw[] = [
   },
 
   {
-    path: "/create-customer",
+    path: "/customers",
     name: "Customer",
     component: Customer,
     meta: {
       title: "Create Customer",
+      linkActive: "AdminSetting",
+      breadcrumb: {
+        parent: "AdminSetting",
+      },
+    },
+  },
+
+  {
+    path: "/saleOrder",
+    name: "SaleOrder",
+    component: SaleOrder,
+    meta: {
+      title: "Create Sale Order",
       linkActive: "AdminSetting",
       breadcrumb: {
         parent: "AdminSetting",

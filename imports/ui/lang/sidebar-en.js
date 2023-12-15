@@ -4,6 +4,7 @@ export default {
   Company: "Company",
   Members: "Members",
   "Create Customer": "Create Customer",
+  "Create Sale Order": "Create Sale Order",
   // SubMenu
   "Make Journal": "Create Journal",
   "Chart of Account": "Chart of Account",
