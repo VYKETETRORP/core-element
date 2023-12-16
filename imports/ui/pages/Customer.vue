@@ -201,7 +201,9 @@
         </el-row>
 
         <!--tab-->
+
         <el-tabs type="border-card">
+          <!-- Tab 1 -->
           <el-tab-pane>
             <template #label>
               <span class="custom-tabs-label">
@@ -212,7 +214,7 @@
               </span>
             </template>
             <el-row :gutter="20">
-              <el-col :span="12">
+              <el-col :span="24" :md="12">
                 <el-form-item
                   :rules="rules.telephone"
                   :label="$t('app.customer.Telephone')"
@@ -227,7 +229,6 @@
                 >
                   <el-input v-model="form.email" />
                 </el-form-item>
-
                 <el-form-item
                   :rules="rules.industry"
                   :label="$t('app.customer.Geography')"
@@ -255,7 +256,7 @@
                 </el-form-item>
               </el-col>
 
-              <el-col :span="12">
+              <el-col :span="24" :md="12">
                 <el-form-item
                   style="margin-left: 35px"
                   :rules="rules.email"
@@ -267,7 +268,6 @@
                     v-model="form.location"
                   />
                 </el-form-item>
-
                 <el-form-item
                   style="margin-left: 35px"
                   :rules="rules.map"
@@ -289,7 +289,6 @@
                     </template>
                   </el-input>
                 </el-form-item>
-
                 <el-form-item
                   style="margin-left: 35px"
                   :label="$t('app.customer.Delivery Address')"
@@ -309,7 +308,7 @@
             </el-row>
           </el-tab-pane>
 
-          <!--two-->
+          <!-- Tab 2 -->
           <el-tab-pane>
             <template #label>
               <span class="custom-tabs-label">
@@ -320,7 +319,7 @@
               </span>
             </template>
             <el-row :gutter="20">
-              <el-col :span="12">
+              <el-col :span="24" :md="12">
                 <el-form-item
                   :rules="rules.paymentTerm"
                   :label="$t('app.customer.Payment Term')"
@@ -340,8 +339,7 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-
-              <el-col :span="12">
+              <el-col :span="24" :md="12">
                 <el-form-item
                   style="margin-left: 35px"
                   :rules="rules.target"
@@ -363,7 +361,7 @@
             </el-row>
           </el-tab-pane>
 
-          <!--threee-->
+          <!-- Tab 3 -->
           <el-tab-pane :label="$t('app.Company.Setting')">
             <template #label>
               <span class="custom-tabs-label">
@@ -374,7 +372,7 @@
               </span>
             </template>
             <el-row :gutter="20">
-              <el-col :span="12">
+              <el-col :span="24" :md="12">
                 <el-form-item
                   :rules="rules.accountReceivable"
                   :label="$t('app.customer.Account Receivable')"
@@ -393,31 +391,7 @@
                     />
                   </el-select>
                 </el-form-item>
-              </el-col>
 
-              <el-col :span="12">
-                <el-form-item
-                  style="margin-left: 35px"
-                  :rules="rules.TradeDiscount"
-                  :label="$t('app.customer.Trade Discount')"
-                  prop="setting.TradeDiscount"
-                >
-                  <el-select
-                    v-model="form.setting.DepositAccount"
-                    placeholder="Select"
-                    style="width: 100%"
-                  >
-                    <el-option
-                      v-for="item in currencyOpts"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
-                </el-form-item>
-              </el-col>
-
-              <el-col :span="12">
                 <el-form-item
                   :rules="rules.CashAccount"
                   :label="$t('app.customer.Cash Account')"
@@ -437,35 +411,15 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="24" :md="12">
                 <el-form-item
                   style="margin-left: 35px"
-                  :rules="rules.SettlementDiscount"
-                  :label="$t('app.customer.Settlement Discount')"
-                  prop="setting.paymentTerm"
+                  :rules="rules.TradeDiscount"
+                  :label="$t('app.customer.Trade Discount')"
+                  prop="setting.TradeDiscount"
                 >
                   <el-select
-                    v-model="form.setting.SettlementDiscount"
-                    placeholder="Select"
-                    style="width: 100%"
-                  >
-                    <el-option
-                      v-for="item in currencyOpts"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item
-                  :rules="rules.paymentTerm"
-                  :label="$t('app.customer.Payment Term')"
-                  prop="setting.paymentTerm"
-                >
-                  <el-select
-                    v-model="form.setting.paymentTerm"
+                    v-model="form.setting.DepositAccount"
                     placeholder="Select"
                     style="width: 100%"
                   >
@@ -517,20 +471,6 @@
 <script>
 import moment from "moment";
 import _ from "lodash";
-
-//import { useI18n } from "vue-i18n";
-
-//const { t } = useI18n();
-//import Msg from '/imports/client/lib/message'
-//import Notify from '/imports/client/lib/notify'
-
-//// Collections
-//import FilesCollection from '/imports/api/files/files'
-
-//// Methods
-//import { findOneCompany, updateCompany } from '../../api/company/methods'
-//import LookupValue from '../lib/lookup-value'
-
 // Components
 import {
   ElForm,
