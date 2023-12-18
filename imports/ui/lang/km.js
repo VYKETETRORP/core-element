@@ -123,9 +123,11 @@ export default {
   // SALE ORDER
 
   saleOrder: {
+    saleOrder: "បញ្ជាលក់",
     code: "Id",
     " Ref No": "លេខយោង",
     Date: "កាលបរិច្ឆេទ",
+    exDate: "កាលបរិច្ឆេទរំពឹងទុក",
     Customer: "អតិថិជន",
     Info: "ពត៌មាន",
     "Expect Date": "កាលបរិច្ឆេទរំពឹងទុក",

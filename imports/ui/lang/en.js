@@ -119,19 +119,31 @@ export default {
     "Trade Discount": "Trade Discount",
     "Settlement Discount": "Settlement Discount",
   },
+  "rate-details": {
+    NO: "NO",
+    BaseCurrency: "BaseCurrency",
+    ToCurrency: "ToCurrency",
+    Bid: "Bid",
+    Ask: "Ask",
+  },
+  item: {
+    Item: "Item",
+  },
 
   //Sale Order
 
   saleOrder: {
+    saleOrder: "Sale Order",
     code: "Id",
     " Ref No": "Ref No",
     Date: "Date",
+    exDate: "Expect Date",
     Customer: "Customer",
     Info: "Info",
     "Expect Date": "Expect Date",
     Employee: "Employee",
     "Deposit Amount": "Deposit Amount",
-    "Cash Account": "Email",
+    "Cash Account": "Case Account",
     Item: "Item",
     NO: "NO",
     ITEM: "ITEM",
