@@ -160,7 +160,7 @@
         <!--item-->
         <!--Sub Items List-->
 
-        <el-tabs type="border-card" style="padding-top: 20px">
+        <el-tabs type="border-card">
           <el-tab-pane>
             <template #label>
               <i class="el-icon-date" />
@@ -196,7 +196,7 @@
                   align-items: center;
                 "
               >
-                <span>SubTotal:</span>
+                <span class="right-align">SubTotal:</span>
                 <span class="right-align">$</span>
               </div>
               <div
@@ -206,7 +206,7 @@
                   align-items: center;
                 "
               >
-                <span>SubTotal:</span>
+                <span class="right-align">Total Discount:</span>
                 <span class="right-align">$</span>
               </div>
             </el-card>
@@ -225,16 +225,7 @@
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-          <el-button
-            v-if="showId"
-            :disabled="!$userIsInRole(['super'])"
-            type="danger"
-            @click="remove"
-            style="margin-left: 20px; padding: 15px"
-          >
-            <!-- Delete -->
-            {{ $t("app.btn.delete") }}
-          </el-button>
+
           <el-button style="margin-left: 10px; padding: 15px" @click="cancel()">
             <!-- Cancel -->
             {{ $t("app.btn.cancel") }}
@@ -245,259 +236,46 @@
   </el-card>
 </template>
 
-<script>
-import moment from "moment";
+<script setup lang="ts">
 import Item from "../components/Items.vue";
+import { ref } from "vue";
 import _ from "lodash";
-// Components
-import {
-  ElForm,
-  ElFormItem,
-  ElInput,
-  ElInputNumber,
-  ElDatePicker,
-  ElSelect,
-  ElOption,
-  ElSwitch,
-  ElUpload,
-  ElTabs,
-  ElTabPane,
-  ElRow,
-  ElCol,
-  ElRadio,
-  ElRadioGroup,
-  ElCheckbox,
-  ElButton,
-} from "element-plus";
 
-export default {
-  name: "Company",
-  components: {
-    [ElForm.name]: ElForm,
-    [ElFormItem.name]: ElFormItem,
-    [ElInput.name]: ElInput,
-    [ElInputNumber.name]: ElInputNumber,
-    [ElDatePicker.name]: ElDatePicker,
-    [ElSelect.name]: ElSelect,
-    [ElOption.name]: ElOption,
-    [ElSwitch.name]: ElSwitch,
-    [ElUpload.name]: ElUpload,
-    [ElTabs.name]: ElTabs,
-    [ElTabPane.name]: ElTabPane,
-    [ElRow.name]: ElRow,
-    [ElCol.name]: ElCol,
-    [ElRadio.name]: ElRadio,
-    [ElRadioGroup.name]: ElRadioGroup,
-    [ElCheckbox.name]: ElCheckbox,
-    [ElButton.name]: ElButton,
-    Item,
-  },
+const industryOpts = ref([]);
+const loading = ref(false);
+const form = ref({
+  // Your form properties go here
+});
 
-  data() {
-    return {
-      loading: false,
-      form: {
-        name: "",
-        address: "",
-        telephone: "",
-        email: "",
-        website: "",
-        customerType: "",
-        logo: "",
-        setting: {
-          fiscalDate: moment().startOf("year").toDate(),
-          baseCurrency: "USD",
-          decimalNumber: 2,
-          accountingIntegration: true,
-          dateFormat: "DD/MM/YYYY",
-          lang: "en",
-          tradeBased: false,
-          warningStock: false,
-        },
-      },
-      rules: {
-        defaultPrice: [
-          { required: true, message: "Default Price is required" },
-        ],
+const rules = ref({
+  defaultPrice: [{ required: true, message: "Default Price is required" }],
 
-        status: [{ required: true, message: "Status is required" }],
-        accountReceivable: [
-          { required: true, message: "Account Receivable is required" },
-        ],
-        TradeDiscount: [
-          { required: true, message: " Trade Discount is required" },
-        ],
-        CashAccount: [{ required: true, message: "CashAccount is required" }],
-        paymentTerm: [{ required: true, message: "Payment Term is required" }],
-        SettlementDiscount: [
-          { required: true, message: "Settlement Discount is required" },
-        ],
-        exDate: [{ required: true, message: "Date is required" }],
-        Date: [{ required: true, message: "Date is required" }],
-        Employee: [{ required: true, message: "Employee is required" }],
-        name: [{ required: true, message: "Name is required" }],
-        address: [{ required: true, message: "Address is required" }],
-        refNo: [{ required: true, message: "refNo is required" }],
-        email: [{ type: "email" }],
-        website: [{ type: "url" }],
-        customerType: [{ required: true, message: "Industry is required" }],
-        fiscalDate: [{ required: true, message: "Fiscal date is required" }],
-        baseCurrency: [
-          { required: true, message: "Base currency date is required" },
-        ],
-        decimalNumber: [
-          { required: true, message: "Decimal number date is required" },
-        ],
-        dateFormat: [
-          { required: true, message: "Date format date is required" },
-        ],
-      },
-      // Upload
-      fileList: [],
-      imageUrl: "",
-    };
-  },
-  //  computed: {
-  //    // Lookup
-  //    industryOpts() {
-  //      return this.$store.state.app.lookup.industry;
-  //    },
-  //    currencyOpts() {
-  //      return this.$store.state.app.lookup.currency;
-  //    },
-  //    langOpts() {
-  //      return this.$store.state.app.lookup.lang;
-  //    },
-  //    dateFormatOpts() {
-  //      return this.$store.state.app.lookup.dateFormat;
-  //    },
-  //    isSuper() {
-  //      const user = this.$store.state.app.currentUser;
-  //      return _.includes(user.profile && user.profile.roles, "super");
-  //    },
-  //  },
-  //  mounted() {
-  //    this.getData();
-  //  },
-  //  methods: {
-  //    getData() {
-  //      this.loading = true;
-  //      findOneCompany
-  //        .callPromise()
-  //        .then((result) => {
-  //          this.form = result;
-  //          if (result.logoName) {
-  //            this.fileList = [
-  //              {
-  //                name: result.logoName,
-  //                url: result.logoUrl,
-  //              },
-  //            ];
-  //            this.imageUrl = result.logoUrl;
-  //          }
-  //          this.loading = false;
-  //        })
-  //        .catch((err) => {
-  //          this.loading = false;
-  //          this.$store.dispatch("app/messageE", err);
-  //        });
-  //    },
-  //    // Upload logo
-  //    handleFileChange(file, fileList) {
-  //      file.raw.name = "logo";
-  //      this.fileList = [file];
-  //      this.makeImageUrl(file.raw);
-  //    },
-  //    handleFileRemove(file, fileList) {
-  //      this.fileList = [];
-  //      this.makeImageUrl(null);
-  //    },
-  //    makeImageUrl(file) {
-  //      this.imageUrl = file ? URL.createObjectURL(file) : "";
-  //    },
-  //    uploadFile(file) {
-  //      if (file) {
-  //        return new Promise((resolve, reject) => {
-  //          const fileName = "logo." + file.name.replace(/^.*\./, "");
-  //          FilesCollection.insert({
-  //            file: file,
-  //            fileName,
-  //            chunkSize: "dynamic",
-  //            onUploaded(err, res) {
-  //              if (err) {
-  //                this.$store.dispatch("app/messageE", err);
-  //                reject(err);
-  //              } else {
-  //                resolve(res);
-  //              }
-  //            },
-  //          });
-  //        });
-  //      } else {
-  //        this.$store.dispatch("app/messageE", "File upload is required");
-  //      }
-  //    },
-  //    // Submit form
-  //    submitForm() {
-  //      this.$refs["form"].validate((valid) => {
-  //        if (valid) {
-  //          this.loading = true;
-
-  //          // Pick data
-  //          if (!this.form.email) delete this.form.email;
-  //          if (!this.form.website) delete this.form.website;
-  //          this.form.setting.fiscalDate = moment(this.form.setting.fiscalDate)
-  //            .startOf("day")
-  //            .toDate();
-  //          delete this.form.logoName;
-  //          delete this.form.logoUrl;
-
-  //          // Check file upload
-  //          if (this.fileList.length) {
-  //            const file = this.fileList[0].raw;
-
-  //            // Check logo exsit
-  //            if (this.form.logo) FilesCollection.remove({ _id: this.form.logo });
-  //            this.uploadFile(file).then((res) => {
-  //              this.form.logo = res._id; // update id
-  //              this.updateData(this.form);
-  //            });
-  //          } else {
-  //            // Check form logo exist
-  //            if (this.form.logo) {
-  //              FilesCollection.remove({ _id: this.form.logo });
-  //              this.form.logo = "";
-  //            }
-  //            this.updateData(this.form);
-  //          }
-  //        } else {
-  //          this.$store.dispatch("app/messageE", "Please check validate agian");
-  //          return false;
-  //        }
-  //      });
-  //    },
-  //    updateData(doc) {
-  //      updateCompany
-  //        .callPromise(doc)
-  //        .then((result) => {
-  //          if (result) {
-  //            this.loading = false;
-  //            this.$store.dispatch("app/messageS", `Company saved`);
-  //            // get last exchange
-  //            this.$store.dispatch(
-  //              "app/currentExchange",
-  //              this.form.setting.baseCurrency
-  //            );
-  //          }
-  //        })
-  //        .catch((err) => {
-  //          console.log(err);
-  //          this.loading = false;
-  //          this.$store.dispatch("app/messageE", err);
-  //        });
-  //    },
-  //  },
-};
+  status: [{ required: true, message: "Status is required" }],
+  accountReceivable: [
+    { required: true, message: "Account Receivable is required" },
+  ],
+  TradeDiscount: [{ required: true, message: " Trade Discount is required" }],
+  CashAccount: [{ required: true, message: "CashAccount is required" }],
+  paymentTerm: [{ required: true, message: "Payment Term is required" }],
+  SettlementDiscount: [
+    { required: true, message: "Settlement Discount is required" },
+  ],
+  exDate: [{ required: true, message: "Date is required" }],
+  Date: [{ required: true, message: "Date is required" }],
+  Employee: [{ required: true, message: "Employee is required" }],
+  name: [{ required: true, message: "Name is required" }],
+  address: [{ required: true, message: "Address is required" }],
+  refNo: [{ required: true, message: "refNo is required" }],
+  email: [{ type: "email" }],
+  website: [{ type: "url" }],
+  customerType: [{ required: true, message: "Industry is required" }],
+  fiscalDate: [{ required: true, message: "Fiscal date is required" }],
+  baseCurrency: [{ required: true, message: "Base currency date is required" }],
+  decimalNumber: [
+    { required: true, message: "Decimal number date is required" },
+  ],
+  dateFormat: [{ required: true, message: "Date format date is required" }],
+});
 </script>
 
 <style>

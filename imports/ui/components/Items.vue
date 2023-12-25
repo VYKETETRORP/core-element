@@ -1,444 +1,224 @@
 <template>
-  <div>
-    <!--Table List-->
-    <el-form ref="form" v-loading.body="loading" :model="form">
-      <el-table
-        v-click-outside="unsetCurrentRowIndex"
-        :data="form.items"
-        :header-cell-style="{
-          'text-transform': 'uppercase',
-          padding: '8px 0px',
-        }"
-        :cell-style="{ padding: '3px 0px', height: '40px' }"
-        :size="formSize"
-        :row-style="tableRowStyle"
-        stripe
-        border
-        :resizable="true"
-        highlight-current-row
-        style="width: 100%"
-        @header-click="handleHeaderClick"
-        @cell-click="handleCellClick"
+  <el-form :size="`default`" ref="formRef" :model="form" class="demo-dynamic">
+    <el-table
+      :header-cell-style="{
+        'text-transform': 'uppercase',
+        padding: '8px 0px',
+      }"
+      stripe
+      :resizable="true"
+      highlight-current-row
+      style="width: 100%"
+      :size="`default`"
+      :cell-style="{ padding: '3px 0px', height: '40px' }"
+      :data="form.details"
+    >
+      <el-table-column width="70px" align="center" label="NO">
+        <template #default="scope">
+          <el-form-item style="margin: 0px">
+            <el-button type="primary" plain class="custom-no-button">
+              {{ scope.$index + 1 }}
+            </el-button>
+          </el-form-item>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="370px" prop="itemId" label="Item">
+        <template #default="scope">
+          <el-form-item
+            style="margin: 0px"
+            :prop="'details.' + scope.$index + '.item'"
+          >
+            <el-input v-model="scope.row.item" />
+          </el-form-item>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="180px" prop="memo" label="Memo">
+        <template #default="scope">
+          <el-form-item
+            style="margin: 0px"
+            :prop="'details.' + scope.$index + '.memo'"
+          >
+            <el-input v-model="scope.row.item" />
+          </el-form-item>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="170px" prop="qty" label="Qty">
+        <template #default="scope">
+          <el-form-item
+            :prop="'details.' + scope.$index + '.qty'"
+            style="margin: 0px"
+          >
+            <el-input v-model.number="scope.row.qty" />
+          </el-form-item>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="170px" prop="uom" label="UOM">
+        <template #default="scope">
+          <el-form-item
+            :prop="'details.' + scope.$index + '.uom'"
+            style="margin: 0px"
+          >
+            <el-input v-model.number="scope.row.uom" />
+          </el-form-item>
+        </template>
+      </el-table-column>
+      <el-table-column width="170px" prop="price" label="Price">
+        <template #default="scope">
+          <el-form-item
+            :prop="'details.' + scope.$index + '.price'"
+            style="margin: 0px"
+          >
+            <el-input v-model.number="scope.row.price" />
+          </el-form-item>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="140px" prop="amount" label="Amount">
+      </el-table-column>
+
+      <el-table-column width="100px" align="right" label="☰">
+        <template #default="scope">
+          <el-form-item style="margin: 0px">
+            <el-button
+              @click.prevent="removeDomain(scope.row)"
+              type="danger"
+              plain
+              class="delete"
+              :icon="Delete"
+            />
+          </el-form-item>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-form-item
+      style="
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      "
+    >
+      <el-dropdown
+        @click="addDomain"
+        split-button
+        type="primary"
+        placement="top-end"
       >
-        <!-- No -->
-        <el-table-column
-          type="index"
-          :label="$t('app.rate-details.NO')"
-          width="70px"
-          align="center"
-        />
-        <!--Base Currecy -->
-        <el-table-column
-          prop="baseExchangeCurrencyId"
-          :label="$t('app.rate-details.BaseCurrency')"
-          align="left"
-        >
-          <template v-slot:default="scope">
-            <template v-if="scope.$index === currentRowIndex">
-              <el-form-item>
-                <el-select
-                  :ref="$t('app.rate-details.BaseCurrency')"
-                  v-model="scope.row.baseExchangeCurrencyId"
-                  :size="formSize"
-                  filterable
-                  automatic-dropdown
-                  default-first-option
-                  clearable
-                  remote
-                  placeholder="Base Exchange Currency"
-                  @change="handleBaseNameChange(scope.row)"
-                >
-                  <el-option
-                    v-for="doc in filteredCurrencyOpts"
-                    :key="doc._id"
-                    :label="doc.name"
-                    :value="doc._id"
-                    :disabled="doc._id === scope.row.toExchangeCurrencyId"
-                  >
-                    <span v-html="doc.name" />
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </template>
-            <template v-else>
-              <span id="LabelClick" class="text-left">
-                {{ scope.row.baseName }}
-              </span>
-            </template>
-          </template>
-        </el-table-column>
+        + {{ $t("app.btn.new") }}
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>
+              {{ $t("app.btn.New") }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
 
-        <!--To Currecy -->
-        <el-table-column
-          prop="toExchangeCurrencyId"
-          :label="$t('app.rate-details.ToCurrency')"
-          align="left"
-        >
-          <template #default="scope">
-            <el-form-item
-              :key="scope.$index + '.toExchangeCurrencyId'"
-              :prop="'items.' + scope.$index + '.ToCurrency'"
-              class="form-item"
-              style="margin: 0"
-            >
-              <el-select
-                :ref="$t('app.rate-details.ToCurrency')"
-                v-model="scope.row.toExchangeCurrencyId"
-                :size="formSize"
-                filterable
-                automatic-dropdown
-                clearable
-                remote
-                placeholder="To Exchange Currency"
-                @change="handleToNameChange(scope.row)"
-              >
-                <el-option
-                  v-for="doc in currencyOpts"
-                  :key="doc._id"
-                  :label="doc.name"
-                  :value="doc._id"
-                  :disabled="doc._id === scope.row.baseExchangeCurrencyId"
-                >
-                  <span v-html="doc.name" />
-                </el-option>
-              </el-select>
-            </el-form-item>
-
-            <span id="LabelClick" class="text-left">
-              {{ scope.row.toName }}
-            </span>
-          </template>
-        </el-table-column>
-
-        <!-- bid  -->
-        <el-table-column
-          prop="Bid"
-          :label="$t('app.rate-details.Bid')"
-          align="center"
-        >
-          <template #default="scope">
-            <el-form-item
-              v-if="scope.$index === currentRowIndex"
-              :prop="'items.' + scope.$index + '.Bid'"
-              class="form-item"
-              style="margin: 0"
-            >
-              <!--<el-input-number
-                :ref="$t('exchange.rate-details.Bid')"
-                v-model.number="scope.row.bid"
-                v-inputmask="numericMask"
-                :size="formSize"
-                :min="0"
-                autofocus
-                :controls="false"
-                style="width: 100%"
-                @focus="$event.target.select()"
-              />-->
-              <InputNumberMask
-                :ref="$t('exchange.rate-details.Bid')"
-                v-model.number="scope.row.bid"
-                :size="formSize"
-                :min="0"
-                autofocus
-                :zero-precision="true"
-                style="width: 100%"
-                @focus="$event.target.select()"
-              />
-            </el-form-item>
-
-            <span v-else id="LabelClick" class="text-right">
-              {{ $filters.numberDigit(scope.row.bid) }}
-            </span>
-          </template>
-        </el-table-column>
-        <!-- ask  -->
-        <el-table-column
-          prop="Ask"
-          :label="$t('app.rate-details.Ask')"
-          align="center"
-        >
-          <template #default="scope">
-            <el-form-item
-              v-if="scope.$index === currentRowIndex"
-              :prop="'items.' + scope.$index + '.Ask'"
-              class="form-item"
-              style="margin: 0"
-            >
-              <!-- <el-input-number
-                  :ref="$t('exchange.rate-details.Ask')"
-                  v-model.number="scope.row.ask"
-                  v-inputmask="numericMask"
-                  :size="formSize"
-                  :min="scope.row.bid"
-                  autofocus
-                  :controls="false"
-                  style="width: 100%"
-                  @focus="$event.target.select()"
-                /> -->
-              <InputNumberMask
-                :ref="$t('exchange.rate-details.Ask')"
-                v-model.number="scope.row.ask"
-                :size="formSize"
-                :min="scope.row.bid"
-                autofocus
-                style="width: 100%"
-                :zero-precision="true"
-                @focus="$event.target.select()"
-              />
-            </el-form-item>
-
-            <span v-else id="LabelClick" class="text-right">
-              {{ $filters.numberDigit(scope.row.ask) }}
-            </span>
-          </template>
-        </el-table-column>
-        <!-- Action -->
-        <el-table-column
-          header-align="center"
-          align="left"
-          width="61px"
-          class="action"
-        >
-          <template #header>
-            <i class="el-icon-menu popover-icon" />
-          </template>
-
-          <template #default="scope">
-            <i
-              v-if="visibleRemoveAction()"
-              class="el-icon-remove remove-action"
-              @click="removeRowByIndex(scope.row)"
-            />
-            <i
-              v-if="visibleNewAction(scope.$index)"
-              class="el-icon-circle-plus new-action"
-            />
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-form>
-  </div>
+      <el-button type="danger" plain style="margin-left: auto"
+        >Total Qty :</el-button
+      >
+    </el-form-item>
+  </el-form>
 </template>
 
-<script>
-//import Vue from 'vue';
-//import vClickOutside from "click-outside-vue3";
-
-//  import Notify from '/imports/client/lib/notify'
-
-// methods
-//  import { fetchExchangeCurrency } from '../api/exchange-currency/methods'
-
+<script lang="ts" setup>
+import { ref } from "vue";
+import type { FormInstance } from "element-plus";
 import {
-  round,
-  includes,
-  cloneDeep,
-  defaults,
-  find,
-  isNull,
-  reject,
-  split,
-  times,
-} from "lodash";
-import InputNumberMask from "/imports/ui/components/InputNumberMask.vue";
-
-// // Component
-// import {
-//   Form,
-//   FormItem,
-//   Select,
-//   Option,
-//   Input,
-//   InputNumber,
-// } from 'element-plus'
-export default {
-  name: "Items",
-  directives: {
-    //clickOutside: vClickOutside.directive,
-  },
-  components: {
-    InputNumberMask,
-    // [Form.name]: Form,
-    // [FormItem.name]: FormItem,
-    // [Select.name]: Select,
-    // [Option.name]: Option,
-    // [Input.name]: Input,
-    // [InputNumber.name]: InputNumber,
-  },
-  props: {
-    items: {
-      type: Array,
-      default: function () {
-        return [];
-      },
+  ArrowLeft,
+  ArrowRight,
+  Delete,
+  Edit,
+  Share,
+} from "@element-plus/icons-vue";
+interface DomainItem {
+  key: number;
+  value: string;
+}
+const formRef = ref<FormInstance>();
+const itemDetails = ref<DomainItem[]>([]);
+const form = ref<any>({
+  details: [
+    {
+      item: "",
+      qty: 1,
+      price: 0,
+      uom: 1,
+      //amount: 1,
     },
-    columns: {
-      type: Array,
-      default: function () {
-        return ["baseExchangeCurrencyId", "toExchangeCurrencyId", "bid", "ask"];
-      },
-    },
-    rows: {
-      type: Number,
-      default: 3,
-    },
-    minRow: {
-      type: Number,
-      default: 0,
-    },
-    totalDifference: {
-      type: Number,
-      default: 0,
-    },
-  },
-  data() {
-    // Validate
-    const validateBid = (rule, value, callback) => {
-      if (value < 0) {
-        callback(new Error("Error"));
-      } else {
-        const splitVal = split(rule.field, ".");
-        const crVal = this.form.items[splitVal[1].bid];
+  ],
+});
 
-        if (value === 0 && crVal === 0) {
-          callback(new Error("Error"));
-        }
-        callback();
-      }
-    };
+const removeDomain = (item: DomainItem) => {
+  const index = form.value.details.indexOf(item);
+  if (index !== -1) {
+    form.value.details.splice(index, 1);
+  }
+};
 
-    const validateAsk = (rule, value, callback) => {
-      if (value < 0) {
-        callback(new Error("Error"));
-      } else {
-        const splitVal = split(rule.field, ".");
-        const crVal = this.form.items[splitVal[1].ask];
+const addDomain = () => {
+  console.log(itemDetails);
+  form.value.details.push({
+    item: "",
+    qty: 1,
+    price: 0,
+  });
+};
 
-        if (value === 0 && crVal === 0) {
-          callback(new Error("Error"));
-        }
-        callback();
-      }
-    };
-    // const validateExist = (rule, value, callback) => {
-    //   if (!value) {
-    //     return callback(new Error('Name is requiered'))
-    //   } else if (value) {
-    //     let valueArr = this.form.items.map((item) => {
-    //       return item.exchangeCurrencyId
-    //     })
-    //     let isDuplicate = valueArr.some(function (item, idx) {
-    //       return valueArr.indexOf(item) != idx
-    //     })
-    //     if (isDuplicate == true) {
-    //       return callback(new Error('Name is exist'))
-    //     } else {
-    //       return callback()
-    //     }
-    //   } else {
-    //     return callback()
-    //   }
-    // }
+const submitForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (valid) {
+      console.log("submit!", form.value);
+    } else {
+      console.log("error submit!");
+      return false;
+    }
+  });
+};
 
-    return {
-      loading: false,
-      removeAction: false,
-      currencyOpts: [],
-
-      checkedMoreColumns: this.columns,
-      formSize: "large",
-      inactiveIds: [],
-      // Emit
-      itemResult: [],
-      itemError: [],
-      itemErrorIndex: [],
-
-      form: {
-        items: this.items,
-      },
-      //currencyName: '',
-      rules: {
-        // exchangeCurrencyId: [
-        //   { validator: validateExist, required: true, trigger: 'blur' },
-        // ],
-        //exchangeCurrencyId: [{ validator: validateExist, trigger: 'blur' }],
-        baseExchangeCurrencyId: [
-          {
-            message: "Base Currency is required",
-            required: true,
-            trigger: "blur",
-          },
-        ],
-        toExchangeCurrencyId: [
-          {
-            message: "To Currency is required",
-            required: true,
-            trigger: "blur",
-          },
-        ],
-        bid: [{ validator: validateBid, trigger: "blur" }],
-        ask: [{ validator: validateAsk, trigger: "blur" }],
-      },
-      currentRowIndex: null,
-      currentRowIndexActive: false,
-    };
-  },
-
-  // Add new row
-  //  addEmptyRow(count) {
-  //    times(count, (time) => {
-  //      const row = {
-  //        // exchangeCurrencyId: '',
-  //        baseExchangeCurrencyId: "",
-  //        toExchangeCurrencyId: "",
-  //        // rate: 0,
-  //        bid: 0,
-  //        ask: 0,
-  //        baseName: "",
-  //        toName: "",
-  //        status: "active",
-  //      };
-  //      this.form.items.push(row);
-  //    });
-
-  //    // this.emitToParent()
-  //  },
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.resetFields();
 };
 </script>
 
-<style lang="scss" scoped>
-.new-icon {
-  color: #409eff;
+<style lang="scss">
+.custom-no-button {
+  width: 5px;
+  height: 25px;
 }
-.new-action {
-  color: #409eff;
-  cursor: pointer;
-  font-size: large;
+.delete {
+  margin-left: 50px;
+  width: 5px;
+  height: 30px;
+}
+.icon-close-dynamic {
+  width: 1px;
+  height: 2px;
+  vertical-align: middle;
+  margin-left: 50px;
+  border-radius: 100%;
+  border-color: red;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transform-origin: 100% 50%;
+  color: red;
+
   &:hover {
-    color: #66b1ff;
+    background-color: red;
+    color: #ffffff;
   }
-}
 
-.remove-icon {
-  color: #f56c6c;
-}
-.remove-action {
-  color: #f56c6c;
-  cursor: pointer;
-  font-size: large;
-  &:hover {
-    color: #f78989;
+  svg {
+    width: 16px;
+    height: 16px;
+    transform: scale(0.6);
   }
-}
-
-.form-item {
-  margin-bottom: 0px;
-}
-.el-select {
-  width: 100%;
-}
-
-.popover-icon {
-  font-size: 16px;
 }
 </style>
