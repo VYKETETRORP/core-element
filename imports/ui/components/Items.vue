@@ -23,7 +23,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="370px" prop="itemId" label="Item">
+      <el-table-column width="445px" prop="itemId" label="Item">
         <template #default="scope">
           <el-form-item
             style="margin: 0px"
@@ -34,7 +34,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="180px" prop="memo" label="Memo">
+      <el-table-column width="220px" prop="memo" label="Memo">
         <template #default="scope">
           <el-form-item
             style="margin: 0px"
@@ -45,7 +45,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="170px" prop="qty" label="Qty">
+      <el-table-column width="220px" prop="qty" label="Qty">
         <template #default="scope">
           <el-form-item
             :prop="'details.' + scope.$index + '.qty'"
@@ -56,7 +56,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="170px" prop="uom" label="UOM">
+      <el-table-column width="220px" prop="uom" label="UOM">
         <template #default="scope">
           <el-form-item
             :prop="'details.' + scope.$index + '.uom'"
@@ -66,7 +66,7 @@
           </el-form-item>
         </template>
       </el-table-column>
-      <el-table-column width="170px" prop="price" label="Price">
+      <el-table-column width="220px" prop="price" label="Price">
         <template #default="scope">
           <el-form-item
             :prop="'details.' + scope.$index + '.price'"
@@ -77,19 +77,39 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="140px" prop="amount" label="Amount">
+      <el-table-column  prop="amount" label="Amount">
       </el-table-column>
 
       <el-table-column width="100px" align="right" label="☰">
         <template #default="scope">
           <el-form-item style="margin: 0px">
-            <el-button
+            <!-- <el-button 
               @click.prevent="removeDomain(scope.row)"
               type="danger"
               plain
               class="delete"
               :icon="Delete"
-            />
+            /> -->
+            <div   @click.prevent="removeDomain(scope.row)" class="bar-action" style="padding: 3px 0px; height: 40px">
+             
+             <div style="margin-left: 60px;"> <svg
+               viewBox="0 0 1024 1024"
+               xmlns="http://www.w3.org/2000/svg"
+               class="delete-action"
+               data-v-69873352=""
+               style="width: 1.2em; height: 1.2em"
+             >
+               <path
+                 fill="currentColor"
+                 d="m466.752 512-90.496-90.496a32 32 0 0 1 45.248-45.248L512 466.752l90.496-90.496a32 32 0 1 1 45.248 45.248L557.248 512l90.496 90.496a32 32 0 1 1-45.248 45.248L512 557.248l-90.496 90.496a32 32 0 0 1-45.248-45.248L466.752 512z"
+               ></path>
+               <path
+                 fill="currentColor"
+                 d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"
+               ></path>
+             </svg></div>
+           </div>
+          
           </el-form-item>
         </template>
       </el-table-column>
@@ -119,7 +139,7 @@
         </template>
       </el-dropdown>
 
-      <el-button type="danger" plain style="margin-left: auto"
+      <el-button type="danger"  class="el-tag el-tag--danger el-tag--large el-tag--light mx-1 mt-2" plain style="margin-left: auto"
         >Total Qty :</el-button
       >
     </el-form-item>
@@ -193,10 +213,11 @@ const resetForm = (formEl: FormInstance | undefined) => {
   width: 5px;
   height: 25px;
 }
-.delete {
-  margin-left: 50px;
-  width: 5px;
-  height: 30px;
+.bar-action {
+    align-items: center;
+    display: flex;
+    color: red;
+    justify-content: center;
 }
 .icon-close-dynamic {
   width: 1px;
