@@ -139,7 +139,7 @@
         </template>
       </el-dropdown>
 
-      <el-button type="danger"  class="el-tag el-tag--danger el-tag--large el-tag--light mx-1 mt-2" plain style="margin-left: auto"
+      <el-button type="danger"   class="el-tag el-tag--danger el-tag--large el-tag--light mx-1 mt-2" plain style="margin-left: auto"
         >Total Qty :</el-button
       >
     </el-form-item>

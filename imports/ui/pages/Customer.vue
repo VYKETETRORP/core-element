@@ -99,7 +99,7 @@
               :label="$t('app.customer.Default Price')"
               prop="defaultPrice"
             >
-              <el-radio-group v-model="form.defaultPrice">
+              <el-radio-group v-model="defaultPrice">
                 <el-radio label="1" border>Retail Price</el-radio>
                 <el-radio label="2" border>Wholesale Price</el-radio>
               </el-radio-group>
@@ -110,7 +110,7 @@
               :label="$t('app.customer.Status')"
               prop="status"
             >
-              <el-radio-group v-model="form.status">
+              <el-radio-group v-model="status">
                 <el-radio label="1" border>Active</el-radio>
                 <el-radio label="2" border>Inactive</el-radio>
               </el-radio-group>
@@ -278,12 +278,16 @@
                     <template #append>
                       <el-button @click="_getNextRefNum">
                         <template #icon>
-                          <i
+                          <!-- <i
                             class="fa-sharp fa-solid fa-location-dot fa-lg"
                             style="color: #f89898"
-                          />
+                          /> -->
+                          <i
+                            style="color: #f89898"
+                            class="fas fa-map-marker-alt"
+                          ></i>
 
-                          <!--<i class="fa fa-barcode" />-->
+                          <!-- <i class="fa fa-barcode" /> -->
                         </template>
                       </el-button>
                     </template>
@@ -325,11 +329,7 @@
                   :label="$t('app.customer.Payment Term')"
                   prop="setting.paymentTerm"
                 >
-                  <el-select
-                   
-                    placeholder="Select"
-                    style="width: 100%"
-                  >
+                  <el-select placeholder="Select" style="width: 100%">
                     <el-option
                       v-for="item in currencyOpts"
                       :key="item.value"
@@ -378,11 +378,7 @@
                   :label="$t('app.customer.Account Receivable')"
                   prop="setting.paymentTerm"
                 >
-                  <el-select
-                
-                    placeholder="Select"
-                    style="width: 100%"
-                  >
+                  <el-select placeholder="Select" style="width: 100%">
                     <el-option
                       v-for="item in currencyOpts"
                       :key="item.value"
@@ -397,11 +393,7 @@
                   :label="$t('app.customer.Cash Account')"
                   prop="setting.paymentTerm"
                 >
-                  <el-select
-                    
-                    placeholder="Select"
-                    style="width: 100%"
-                  >
+                  <el-select placeholder="Select" style="width: 100%">
                     <el-option
                       v-for="item in currencyOpts"
                       :key="item.value"
@@ -418,11 +410,7 @@
                   :label="$t('app.customer.Trade Discount')"
                   prop="setting.TradeDiscount"
                 >
-                  <el-select
-                  
-                    placeholder="Select"
-                    style="width: 100%"
-                  >
+                  <el-select placeholder="Select" style="width: 100%">
                     <el-option
                       v-for="item in currencyOpts"
                       :key="item.value"
@@ -469,8 +457,6 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
-
 import { ref, reactive } from "vue";
 import _ from "lodash";
 // Components
@@ -494,33 +480,34 @@ import {
   ElButton,
 } from "element-plus";
 
+const defaultPrice = ref();
+const status = ref();
 const loading = ref(false);
 const form = ref({
   name: "",
-
-  exDate:"",
-  refNo:"",
-  TradeDiscount:"",
-  CashAccount:"",
+  defaultPrice: "",
+  billingAddress: "",
+  status: "",
+  exDate: "",
+  refNo: "",
+  TradeDiscount: "",
+  CashAccount: "",
   address: "",
   telephone: "",
   email: "",
   website: "",
   customerType: "",
   logo: "",
-
-  accountReceivable:"",
-  paymentTerm:"",
-  Employee:"",
-  map:"",
-  deliverAddress:"",
-  EmployeeType:"",
-  geography:"",
-  location:"",
-  industry:"",
-  memo:"",
-
-
+  accountReceivable: "",
+  paymentTerm: "",
+  Employee: "",
+  map: "",
+  deliverAddress: "",
+  EmployeeType: "",
+  geography: "",
+  location: "",
+  industry: "",
+  memo: "",
 });
 
 const rules = ref({

@@ -187,7 +187,7 @@
           </el-col>
 
           <!-- Second column -->
-          <el-col  style="margin-left: auto;" class="float-right" :span="24" :sm="24" :md="12" :lg="12">
+          <el-col fill style="float: right;" class="float-right" :span="24" :sm="24" :md="12" :lg="12">
             <el-card class="el-card__body" shadow="never">
               <div
                 style="

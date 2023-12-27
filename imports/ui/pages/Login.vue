@@ -58,13 +58,12 @@
 </template>
 
 <script>
-//imports/ui/lib/notify.js
-import Msg from "/imports/ui/lib/notify";
+import Msg from '/imports/ui/lib/message'
 // Component
-import { ElInput, ElButton, ElIcon } from "element-plus";
+import { ElInput, ElButton, ElIcon } from 'element-plus'
 
 export default {
-  name: "Login",
+  name: 'Login',
   components: {
     [ElInput.name]: ElInput,
     [ElButton.name]: ElButton,
@@ -72,94 +71,97 @@ export default {
   },
   data() {
     return {
-      windowSize: "default",
+      windowSize: 'default',
       loadingLogin: false,
-      passwordInputType: "password",
-      passwordVisibilityIcon: "eye",
+      passwordInputType: 'password',
+      passwordVisibilityIcon: 'eye',
       form: {
-        username: "",
-        password: "",
+        username: '',
+        password: '',
       },
-    };
+    }
   },
   computed: {
     userExpiryDay() {
-      return this.$store.getters["app/userExpiryDay"];
+      return this.$store.getters['app/userExpiryDay']
     },
   },
   created() {
     // Get init window size
-    this.resizeWindow();
+    this.resizeWindow()
     // Track window size
-    window.addEventListener("resize", this.resizeWindow);
+    window.addEventListener('resize', this.resizeWindow)
   },
   unmounted() {
     // Remove window resize event
-    window.removeEventListener("resize", this.resizeWindow);
+    window.removeEventListener('resize', this.resizeWindow)
   },
   methods: {
     resizeWindow() {
-      if (!window) this.windowSize = "default";
+      if (!window) this.windowSize = 'default'
 
       // Cheeck screen width
       if (window.innerWidth > 1025) {
-        this.windowSize = "default";
+        this.windowSize = 'default'
       } else {
-        this.windowSize = "small";
+        this.windowSize = 'small'
       }
     },
     selectAll(event) {
-      event.target.select();
+      event.target.select()
     },
     togglePasswordVisibility() {
-      if (this.passwordInputType === "password") {
-        this.passwordInputType = "text";
-        this.passwordVisibilityIcon = "eye-slash";
+      if (this.passwordInputType === 'password') {
+        this.passwordInputType = 'text'
+        this.passwordVisibilityIcon = 'eye-slash'
       } else {
-        this.passwordInputType = "password";
-        this.passwordVisibilityIcon = "eye";
+        this.passwordInputType = 'password'
+        this.passwordVisibilityIcon = 'eye'
       }
     },
     forgetPass({ route }) {
       // console.log(route)
-      this.$router.push(route);
+      this.$router.push(route)
     },
     resetNewPass({ route }) {
       // console.log(route)
-      this.$router.push(route);
+      this.$router.push(route)
     },
     submit() {
-      this.loadingLogin = true;
+      this.loadingLogin = true
 
       if (this.form.username && this.form.password) {
         this.$store
-          .dispatch("app/login", this.form)
+          .dispatch('app/login', this.form)
           .then(() => {
             // Check expiry day
             if (this.userExpiryDay <= 0) {
-              this.$router.push({ name: "Confirm" });
+              this.$router.push({ name: 'Confirm' })
             } else {
-              this.$router.push({ name: "Dashboard" });
+              this.$router.push({ name: 'Dashboard' })
             }
           })
           .catch((err) => {
-            this.loadingLogin = false;
-            Msg.error(err.reason || err);
+            this.loadingLogin = false
+            Msg.error(err.reason || err)
             // Msg.error('Username or password is incorrect')
-            this.$refs.username.$el.querySelector("input").focus();
-          });
+            this.$refs.username.$el.querySelector('input').focus()
+          })
       } else {
-        this.loadingLogin = false;
-        Msg.error("Username or password is incorrect");
+        this.loadingLogin = false
+        Msg.error('Username or password is incorrect')
       }
     },
   },
-};
+}
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 // Variable
-$small-screen: "only screen and (min-width: 0px) and (max-width: 1025px)";
+$small-screen: 'only screen and (min-width: 0px) and (max-width: 1025px)';
 
 .login-textbox {
   :deep(.el-input__inner) {
