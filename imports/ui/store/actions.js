@@ -43,14 +43,14 @@ export default {
             //   refId: '',
             // })
             Meteor.call(
-              'app.insertAuditLog',
-              {
-                page: 'In',
-                title: username,
-                event: 'LOG',
-                data: '',
-                refId: '',
-              },
+              // 'app.insertAuditLog',
+              // {
+              //   page: 'In',
+              //   title: username,
+              //   event: 'LOG',
+              //   data: '',
+              //   refId: '',
+              // },
               (err, res) => {
                 if (res) {
                   return 'Success'
@@ -86,20 +86,23 @@ export default {
     //     console.log(err)
     //   })
     Meteor.call(
-      'app.insertAuditLog',
-      {
-        page: 'Out',
-        title: state.currentUser.username,
-        event: 'LOG',
-        data: '',
-        refId: '',
-      },
+      // 'app.insertAuditLog',
+      // {
+      //   page: 'Out',
+      //   title: state.currentUser.username,
+      //   event: 'LOG',
+      //   data: '',
+      //   refId: '',
+      // },
       (err, res) => {
         if (res) {
           Meteor.logout(() => {
             commit('LOGOUT')
             // delete all tag view
+
             dispatch('app/tagView/delAllViews', null, { root: true })
+            // const router = useRouter();
+            // router.push({ name: '/login' });
           })
         } else {
           console.log(err)

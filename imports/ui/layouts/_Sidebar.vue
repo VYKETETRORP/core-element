@@ -146,8 +146,35 @@ import { findIndex, map, without } from "lodash";
 import useAuth from "../composables/useAuth";
 import { sidebarMenu } from "/imports/navmenu";
 
-const { logout, loading } = useAuth();
+const { loading } = useAuth();
 const store = useStore();
+const logout = () => {
+  store.dispatch('app/logout')
+    .then(() => {
+      console.log('Logout successful');
+    })  
+    .catch((error) => {
+      console.error('Logout error:', error);
+    });
+};
+
+
+// logout() {
+//       this.$store.dispatch('app/logout')
+//     },
+
+ 
+
+
+// const logout = async () => {
+//   try {
+//     // Assuming your Vuex store has a 'logout' action
+//     await store.dispatch('app/logout');
+//     router.push({ name: 'Login' }); // Change 'login' to the actual name of your login route
+//   } catch (error) {
+//     console.error('Logout failed:', error);
+//   }
+// };
 
 const route = useRoute();
 
@@ -181,10 +208,19 @@ const menu = ref<any[]>([
   },
 ]);
 
+// logout() {
+//       this.$store.dispatch('app/logout')
+//     },
+
+
 const sidebarMenuItems = computed(() => {
   return menu.value;
 });
-
+// const logout = () => {
+//   props.$store.dispatch('app/logout');
+//   // You can emit an event if needed
+//   emit('logout');
+// };
 watch(
   () => route,
   (route) => {

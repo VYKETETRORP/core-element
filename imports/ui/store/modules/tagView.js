@@ -1,29 +1,5 @@
-//export default {
-//  namespaced: true,
-//  state: {
-//    linkActive: {},
-//  },
-//  mutations: {
-//    SET_LINK_ACTIVE(state, name) {
-//      if (name) {
-//        state.linkActive = {
-//          [name]: true,
-//        };
-//      } else {
-//        state.linkActive = {};
-//      }
-//    },
-//  },
-//  actions: {
-//    setLinkActive({ commit }, name) {
-//      commit("SET_LINK_ACTIVE", name);
-//    },
-//  },
-//};
-//import router from "/imports/router";
-//import router from ".../router";
-import { router } from "/imports/ui/router.ts";
 
+import { router } from "/imports/ui/router.ts";
 const homeView = {
   path: "/",
   name: "Dashboard",

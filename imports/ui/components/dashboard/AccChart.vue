@@ -1,231 +1,135 @@
 <template>
-  <div>
-    <Chart :chart-type="`line`" :chart-data="chartData" :options="options" />
+  <div class="bg-white shadow-sm rounded-sm px-[10px]">
+    <div class="bx-heading">Perfomance</div>
+    <el-row :gutter="10">
+      <el-col :span="12">
+        <div class="box">
+          <div class="left-indicator bg-green-400"></div>
+          <div class="bx-wrapper">
+            <div class="bx-content-left">
+              <div class="bx-title">Income</div>
+            </div>
+            <div class="bx-content-right">
+              <div class="badge badge-success shadow">36,475.70 $</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="left-indicator bg-orange-400"></div>
+          <div class="bx-wrapper">
+            <div class="bx-content-left">
+              <div class="bx-title">Expense</div>
+            </div>
+            <div class="bx-content-right">
+              <div class="badge badge-warning shadow">36,475.70 $</div>
+            </div>
+          </div>
+        </div>
+      </el-col>
+
+      <el-col :span="12">
+        <div class="box">
+          <div class="left-indicator bg-red-400"></div>
+          <div class="bx-wrapper">
+            <div class="bx-content-left">
+              <div class="bx-title">Asset</div>
+            </div>
+            <div class="bx-content-right">
+              <div class="badge badge-danger shadow">36,475.70 $</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="left-indicator bg-green-600"></div>
+          <div class="bx-wrapper">
+            <div class="bx-content-left">
+              <div class="bx-title">Net Income</div>
+            </div>
+            <div class="bx-content-right">
+              <div class="badge badge-warning shadow">36,475.70 $</div>
+            </div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-import moment from "moment";
-//import Notify from "/imports/client/lib/notify";
-//import { accChart } from "../../api/reports/accChart";
-import Chart from "./Chart";
-
 export default {
-  name: "AccChart",
-  // extends: Line,
-  components: {
-    Chart,
-  },
-  props: {
-    customFilter: {
-      type: Object,
-      default: function () {
-        return {};
-      },
-    },
-    accDate: {
-      type: Object,
-      default: function () {
-        return {
-          startTranDate: moment().subtract(30, "days").startOf("day").toDate(),
-        };
-      },
-    },
-  },
-
-  data() {
-    return {
-      loading: false,
-      startOfMonth: moment().startOf("years").toDate(),
-      endOfMonth: moment().endOf("year").toDate(),
-      // chartData: {},
-      chartData: {
-        labels: [],
-        datasets: [
-          {
-            label: "Income",
-            borderColor: "#05CBE1",
-            pointBackgroundColor: "#05CBE1",
-            pointBorderColor: "#05CBE1",
-            borderWidth: 1,
-            backgroundColor: [
-              "rgba(0, 231, 255, 0.9)",
-              "rgba(0, 231, 255, 0.25)",
-              "rgba(0, 231, 255, 0)",
-            ],
-            fill: true,
-            tension: 0.4,
-            data: [],
-          },
-          {
-            label: "Expense",
-            borderColor: "#FC2525",
-            pointBackgroundColor: "#FC2525",
-            pointBorderColor: "#FC2525",
-            borderWidth: 1,
-            backgroundColor: [
-              "rgba(255, 0,0, 0.5)",
-              "rgba(255, 0, 0, 0.25)",
-              "rgba(255, 0, 0, 0)",
-            ],
-            fill: true,
-            tension: 0.4,
-            data: [],
-          },
-        ],
-      },
-
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        // hover: {
-        //   animationDuration: 0,
-        // },
-
-        animation: {
-          duration: 2000,
-        },
-        plugins: {
-          filler: {
-            propagate: false,
-            drawTime: "beforeDraw",
-          },
-          tooltip: {
-            legend: {
-              position: "top",
-            },
-            callbacks: {
-              title: (tooltipItems) => {
-                // use filters format
-                const value = this.$filters.date(tooltipItems[0].label);
-                return value;
-              },
-              label: (tooltipItems) => {
-                // // use filters format
-                const label = tooltipItems.dataset.label;
-                const value = `${this.$filters.number(tooltipItems.parsed.y)}`;
-                return `${label} : ${this.baseCurrency}${value}`;
-              },
-            },
-          },
-        },
-        scales: {
-          x: {
-            // type: 'linear',
-            ticks: {
-              callback: (value, index) => {
-                // use filters format
-                return this.$filters.date(this.chartData.labels[value]);
-                // return value
-              },
-            },
-          },
-          y: {
-            type: "linear",
-            position: "left",
-            id: "y-axis-1",
-            ticks: {
-              // beginAtZero: true,
-              callback: (value, index, values) => {
-                // use filters format
-                return this.$filters.number(value);
-              },
-            },
-          },
-        },
-      },
-    };
-  },
-
-  computed: {
-    // currentBranchId() {
-    //   const branch = this.$store.state.app.currentBranch
-    //   return branch && branch._id
-    // },
-    currentBranchId() {
-      return this.$store.getters["app/currentBranchId"];
-    },
-    baseCurrency() {
-      const company = this.$store.state.app && this.$store.state.app.company;
-
-      const opts = [
-        { label: "KHR", symbol: "៛" },
-        { label: "USD", symbol: "$" },
-        { label: "THB", symbol: "฿" },
-      ];
-      let symbol;
-      const currency =
-        company && company.setting && company.setting.baseCurrency;
-      const baseCurr = opts.find((it) => it.label === currency);
-      symbol = baseCurr?.symbol ?? "$";
-
-      return symbol;
-    },
-  },
-
-  watch: {
-    currentBranchId: {
-      handler(val) {
-        if (val) {
-          this.getChart();
-        }
-      },
-    },
-    accDate: {
-      handler(val) {
-        if (val) {
-          if (this.currentBranchId) this.getChart();
-        }
-      },
-      immediate: true,
-      // deep: true,
-    },
-  },
-  activated() {
-    // this.getChart()
-  },
-  methods: {
-    getChart() {
-      if (!this.currentBranchId) return;
-
-      const startTranDate = this.accDate.startTranDate;
-      const selector = {
-        startOfMonth: this.startOfMonth,
-        endOfMonth: this.endOfMonth,
-        startTranDate,
-        branchId: this.currentBranchId,
-      };
-
-      if (this.accDate & this.accDate.endTranDate) {
-        selector.endTranDate = this.accDate.endTranDate;
-      }
-
-      this.loading = true;
-      accChart
-        .callPromise(selector)
-        .then((result) => {
-          if (result) {
-            this.chartData.labels = result.tranDate;
-            this.chartData.datasets[0].data = result.income;
-            this.chartData.datasets[1].data = result.expense;
-
-            this.loading = false;
-          }
-        })
-        .catch((error) => {
-          console.log("chart Acc", error);
-          this.loading = false;
-          Notify.error({ message: error });
-        });
-    },
+  setup() {
+    return {};
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.chart-acc > .el-col,
-.el-col-24 {
-  padding-left: 5px !important;
-  padding-right: 3px !important;
+.bx-heading {
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+}
+.box {
+  position: relative;
+  border-bottom: 1px solid rgba(26, 54, 126, 0.125);
+  display: block;
+  padding: 7px 0;
+  .left-indicator {
+    position: absolute;
+    width: 4px;
+    left: 0;
+    height: 60%;
+    top: 20%;
+    border-radius: 4px;
+  }
+  .bx-wrapper {
+    display: flex;
+    flex: 1;
+    position: relative;
+    align-items: center;
+    
+    .bx-title {
+      opacity: 0.8;
+      font-weight: 700;
+      padding-left: 15px;
+      font-size: 12px;
+    }
+    .bx-content-right {
+      margin-left: auto;
+      .badge {
+        text-transform: uppercase;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 0 10px;
+        min-width: 19px;
+        border-radius: 4px;
+      }
+    }
+  }
+}
+
+.badge-success {
+  color: #fff;
+  /* background-color: #4caf50; */
+  background: linear-gradient(36deg, #4caf50, #75d048);
+}
+.badge-warning {
+  color: #fff;
+  /* background-color: #ff9800 !important; */
+  background: linear-gradient(36deg, #ff9800, #fbb52b);
+}
+
+.badge-info {
+  color: #fff;
+  /* background-color: #3f51b5 !important; */
+  background: linear-gradient(36deg, #1a73e8, #5db1ff);
+}
+
+.badge-danger {
+  background: linear-gradient(36deg, #f5222d, #f97a81);
+  color: #fff !important;
+
 }
 </style>

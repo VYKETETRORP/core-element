@@ -32,7 +32,7 @@ export default () => {
         error.value = err.reason;
       } else {
         error.value = null;
-        router.push("/");
+        //router.push("/login");
       }
     });
   };
