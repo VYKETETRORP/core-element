@@ -27,6 +27,9 @@ import { VueMeteor } from "vue-meteor-tracker";
 import { createMetaManager } from 'vue-meta';
 
 import { router } from "./router";
+
+
+
 // Create application
 const app: Application = createApp({
   // setup() {

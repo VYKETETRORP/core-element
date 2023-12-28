@@ -1,3 +1,6 @@
+
+import { Session } from 'meteor/session';
+
 export default {
   UPDATE_LANG(state, value) {
     state.lang = value;
@@ -10,10 +13,10 @@ export default {
     Session.setAuth('company', value)
     state.company = value
   },
-  UPDATE_CURRENT_USER(state, value) {
-    Session.setAuth('currentUser', value)
-    state.currentUser = value
-  },
+  // UPDATE_CURRENT_USER(state, value) {
+  //   Session.setAuth('currentUser', value)
+  //   state.currentUser = value
+  // },
   UPDATE_ALLOWED_BRANCHES(state, value) {
     Session.setAuth('allowedBranches', value)
     state.allowedBranches = value

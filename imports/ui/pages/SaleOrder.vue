@@ -160,7 +160,7 @@
         <!--item-->
         <!--Sub Items List-->
 
-        <el-tabs type="border-card" >
+        <el-tabs type="border-card">
           <el-tab-pane>
             <template #label>
               <i class="el-icon-date" />
@@ -187,14 +187,13 @@
           </el-col>
 
           <!-- Second column -->
-          <el-col fill style="float: right;" class="float-right" :span="24" :sm="24" :md="12" :lg="12">
+          <el-col style="display: flex" :span="24" :sm="24" :md="12" :lg="12">
             <el-card class="el-card__body" shadow="never">
               <div
                 style="
                   display: flex;
                   justify-content: space-between;
                   align-items: center;
-
                 "
               >
                 <span class="right-align">SubTotal:</span>
@@ -339,7 +338,7 @@ const rules = ref({
 .right-align {
   text-align: right;
 }
-.float-right{
+.float-right {
   float: right;
 }
 .el-card .el-card__body {

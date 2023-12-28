@@ -5,6 +5,7 @@
 // import boxInfo from "../components/dashboard/box-info.vue";
 import boxInfo from '../components/dashboard/box-info.vue';
 import AccChart from '../components/dashboard/AccChart.vue';
+import barChart from '../components/dashboard/bar-chart.vue';
 </script>
 
 <template>
@@ -23,6 +24,25 @@ import AccChart from '../components/dashboard/AccChart.vue';
         style="display: flex"
       >
         <AccChart style="align-self: stretch; width: 100%" />
+      </el-col>
+    </el-row>
+
+    <el-row :gutter="20" class="card-wrapper">
+      <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+        <barChart />
+      </el-col>
+
+
+      
+      <el-col
+        :xs="24"
+        :sm="24"
+        :md="24"
+        :lg="12"
+        :xl="12"
+        style="display: flex"
+      >
+        
       </el-col>
     </el-row>
     <el-row :gutter="10">
