@@ -1,50 +1,49 @@
 <template>
-  <LineChart
-    :chart-data="data"
-    :options="options"
-    css-classes="chart-container"
-  />
+  <div>
+    <canvas ref="areaChartCanvas"></canvas>
+  </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
-import { LineChart } from "vue-chart-3"
-import {
-  Chart,
-  LineController,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement
-} from "chart.js"
+import { ref, onMounted } from 'vue';
+import { Chart, registerables } from 'chart.js';
 
-Chart.register(
-  LineController,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement
-)
+Chart.register(...registerables);
 
-const dataValues = ref([12, 14, 16, 18, 11, 13, 15])
+const areaChartCanvas = ref(null);
 
-const data = computed(() => ({
-  labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+onMounted(() => {
+  const ctx = areaChartCanvas.value.getContext('2d');
 
-  datasets: [
-    {
-      label: "Foo",
-      data: dataValues.value,
-      backgroundColor: "#dc322f"
-    }
-  ]
-}))
+  const testData = {
+    labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre'],
+    datasets: [
+      {
+        label: 'Cities 1',
+        data: [30, 40, 60, 70, 5],
+        backgroundColor: 'rgba(119,206,255,0.3)',
+        borderColor: '#77CEFF',
+        borderWidth: 2,
+        fill: true,
+      },
+      {
+        label: 'Cities 2',
+        data: [10, 20, 30, 40, 50],
+        backgroundColor: 'rgba(255,99,132,0.3)',
+        borderColor: '#FF6384',
+        borderWidth: 2,
+        fill: true,
+      },
+    ],
+  };
 
-const options = ref({
-  plugins: {
-    title: {
-      text: "Line"
-    }
-  }
-})
+  new Chart(ctx, {
+    type: 'line',
+    data: testData,
+  });
+});
 </script>
+
+<style scoped>
+/* Add your component-specific styles here */
+</style>

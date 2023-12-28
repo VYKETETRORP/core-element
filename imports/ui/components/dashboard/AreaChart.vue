@@ -1,60 +1,102 @@
+
+
+    <template>
+      <div class="box box-success" style="margin-top: 10px; padding-top: 4px">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              {{ $t("app.account-setting-account-type.daily income") }}
+            </h3>
+            <div style="width: 110px" class="box-tools pull-right">
+        <el-select v-model="value" placeholder="Last 30 Days">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.disabled"
+          />
+        </el-select>
+      </div>
+          </div>
+    
+          <div class="box-body">
+            <div class="row">
+              <div class="col-md-9 col-sm-8">
+                <div class="pad">
+                  <canvas ref="areaChartCanvas"></canvas>
+    
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+    </template>
+
 <script setup>
-import BoxInfo from "../components/dashboard/box-info.vue";
-import AccChart from "../components/dashboard/AccChart.vue";
-import barChart from "../components/dashboard/bar-chart.vue";
-import AreaChart from "../components/dashboard/AreaChart.vue";
+import { ref, onMounted } from 'vue';
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables);
+
+const areaChartCanvas = ref(null);
+
+onMounted(() => {
+  const ctx = areaChartCanvas.value.getContext('2d');
+
+  const testData = {
+    labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre','Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre'],
+    datasets: [
+      {
+       
+        data: [60, 50, 60, 54, 55,61, 40, 41, 40, 50],
+        label: 'Income',
+            borderColor: '#05CBE1',
+            pointBackgroundColor: '#05CBE1',
+            pointBorderColor: '#05CBE1',
+            borderWidth: 1,
+            backgroundColor: [
+              'rgba(0, 231, 255, 0.9)',
+              'rgba(0, 231, 255, 0.25)',
+              'rgba(0, 231, 255, 0)',
+            ],
+            fill: true,
+            tension: 0.4,
+       
+
+       
+      },
+      {
+     
+        data: [60, 51, 61, 53, 55,60, 40, 42, 40, 50],
+        label: 'Expense',
+            borderColor: '#FC2525',
+            pointBackgroundColor: '#FC2525',
+            pointBorderColor: '#FC2525',
+            borderWidth: 1,
+            // backgroundColor: [
+            //   'rgba(255, 0,0, 0.5)',
+            //   'rgba(255, 0, 0, 0.25)',
+            //   'rgba(255, 0, 0, 0)',
+            // ],
+               backgroundColor:'#ffbcbc',
+            fill: true,
+            tension: 0.4,
+
+        
+      },
+    ],
+  };
+
+  new Chart(ctx, {
+    type: 'line',
+    data: testData,
+  });
+});
 </script>
 
-<template>
-  <div shadow="never" class="dashboard">
-    <h3 class="title">Welcome to Rabbit Tech!</h3>
-
-    <el-row :gutter="20" class="card-wrapper">
-      <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-        <BoxInfo />
-      </el-col>
-      <el-col
-        :xs="24"
-        :sm="24"
-        :md="24"
-        :lg="12"
-        :xl="12"
-        style="display: flex"
-      >
-        <AccChart style="align-self: stretch; width: 100%" />
-      </el-col>
-    </el-row>
-
-
-    <!-- row 2 -->
-    <el-row :gutter="10">
-      <el-col :xs="24" :sm="24" :md="24"> </el-col>
-    </el-row>
-    <el-row :gutter="20" class="card-wrapper">
-      <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-        <barChart />
-      </el-col>
-      <el-col
-        :xs="24"
-        :sm="24"
-        :md="24"
-        :lg="12"
-        :xl="12"
-        style="display: flex"
-      >
-        <AreaChart style="align-self: stretch; width: 100%" />
-      </el-col>
-    </el-row>
-    <el-row :gutter="10">
-      <el-col :xs="24" :sm="24" :md="24"> </el-col>
-    </el-row>
-
- 
-  </div>
-</template>
-
 <style lang="scss" scoped>
-@import "./imports/client/styles/main.scss";
+// @import "./imports/client/styles/main.scss";
 
 
 .title {
@@ -122,6 +164,7 @@ import AreaChart from "../components/dashboard/AreaChart.vue";
   position: absolute;
   right: 10px;
   top: 2px;
+color: #444;
 }
 .pull-right {
   float: right;
