@@ -164,7 +164,7 @@ onMounted(() => {
   position: absolute;
   right: 10px;
   top: 2px;
-color: #444;
+
 }
 .pull-right {
   float: right;

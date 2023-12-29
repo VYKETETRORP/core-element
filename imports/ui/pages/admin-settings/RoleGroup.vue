@@ -52,7 +52,7 @@
 import VueJsonPretty from "vue-json-pretty";
 
 //  // Message
-//  import Msg from '/imports/client/lib/message'
+ import Msg from '/imports/ui/lib/message'
 //  import Notify from '/imports/client/lib/notify'
 
 //  // Mixin
@@ -74,9 +74,10 @@ import VueJsonPretty from "vue-json-pretty";
 import { ElTableColumn } from "element-plus";
 
 // Component
-import DataTables from "../components/DataTables.vue";
+import DataTables from "../../components/DataTable.vue";
 import RoleGroupForm from "./RoleGroupForm.vue";
-
+import TableAction from "../../components/TableAction.vue";
+import TableToolbar from "../../components/TableToolbar.vue";
 export default {
   name: "RoleGroup",
   components: {
@@ -84,10 +85,10 @@ export default {
     DataTables,
     VueJsonPretty,
     TableToolbar,
-    TableAction,
+    TableAction, 
     RoleGroupForm,
   },
-  mixins: [dataTablesMixin, softRemoveMixin, restoreMixin, removeMixin],
+  // mixins: [dataTablesMixin, softRemoveMixin, restoreMixin, removeMixin],
   data() {
     return {
       loading: false,
@@ -116,13 +117,13 @@ export default {
       updateDoc: null,
     };
   },
-  created() {
-    // Extend data tables props (Mixin)
-    this.tableProps.defaultSort = {
-      prop: "_id",
-      order: "ascending",
-    };
-  },
+  // created() {
+  //   // Extend data tables props (Mixin)
+  //   this.tableProps.defaultSort = {
+  //     prop: "_id",
+  //     order: "ascending",
+  //   };
+  // },
   mounted() {
     this.getData();
   },

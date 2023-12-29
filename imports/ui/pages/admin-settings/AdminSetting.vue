@@ -54,6 +54,7 @@ import UserProfile from "./Profile.vue";
 // Component
 import { ElCard, ElRow, ElCol, ElMenu, ElMenuItem } from "element-plus";
 import User from "./User.vue";
+import RoleGroup from "./RoleGroup.vue"
 
 export default {
   name: "AdminSetting",
@@ -65,9 +66,10 @@ export default {
     [ElMenuItem.name]: ElMenuItem,
     UserProfile,
     User,
+    RoleGroup,
 
     //RoleGroup,
-    RoleGroup: defineAsyncComponent(() => import("./RoleGroup.vue")),
+    // RoleGroup: defineAsyncComponent(() => import("./RoleGroup.vue")),
     //RoleGroup: defineAsyncComponent(() => import("./RoleGroup")),
 
     //Modules: defineAsyncComponent(() => import("./ModuleForm")),
