@@ -53,26 +53,7 @@ import VueJsonPretty from "vue-json-pretty";
 
 //  // Message
  import Msg from '/imports/ui/lib/message'
-//  import Notify from '/imports/client/lib/notify'
-
-//  // Mixin
-//  import dataTablesMixin from '/imports/client/mixins/data-tables'
-//  import softRemoveMixin from '/imports/client/mixins/soft-remove'
-//  import restoreMixin from '/imports/client/mixins/restore'
-//  import removeMixin from '/imports/client/mixins/remove'
-
-//  // Table
-//  import TableToolbar from '/imports/client/components/TableToolbar.vue'
-//  import TableAction from '/imports/client/components/TableAction.vue'
-
-// Method
-//  import { findRoleGroups, removeRoleGroup } from '../../api/roles/methods'
-
-// Component
-//import RoleGroupForm from "./RoleGroupForm";
-//import RoleGroupForm from "./RoleGroupForm";
 import { ElTableColumn } from "element-plus";
-
 // Component
 import DataTables from "../../components/DataTable.vue";
 import RoleGroupForm from "./RoleGroupForm.vue";
@@ -124,33 +105,40 @@ export default {
   //     order: "ascending",
   //   };
   // },
-  mounted() {
-    this.getData();
-  },
+//   mounted() {
+//     this.getData();
+//   },
   methods: {
-    getData() {
-      this.loading = true;
-      findRoleGroups
-        .callPromise({})
-        .then((result) => {
-          this.tableData = result;
-          this.loading = false;
-          //console.log('role group', result)
-        })
-        .catch((error) => {
-          this.loading = false;
-          Notify.error({ message: error });
-        });
-    },
+    // getData() {
+    //   this.loading = true;
+    //   findRoleGroups
+    //     .callPromise({})
+    //     .then((result) => {
+    //       this.tableData = result;
+    //       this.loading = false;
+    //       //console.log('role group', result)
+    //     })
+    //     .catch((error) => {
+    //       this.loading = false;
+    //       Notify.error({ message: error });
+    //     });
+    // },
     // Add new
+    // addNew() {
+    //   this.formType = "New";
+    //   this.currentModal = "RoleGroupForm";
+    //   this.$nextTick(() => {
+    //     this.modalVisible = true;
+    //   });
+    // },
     addNew() {
-      this.formType = "New";
-      this.currentModal = "RoleGroupForm";
-      this.$nextTick(() => {
-        this.modalVisible = true;
-      });
-    },
-
+  console.log("addNew method called");
+  this.formType = "New";
+  this.currentModal = "RoleGroupForm";
+  this.$nextTick(() => {
+    this.modalVisible = true;
+  });
+},
     // Table Action
     edit(row) {
       this.formType = "Edit";

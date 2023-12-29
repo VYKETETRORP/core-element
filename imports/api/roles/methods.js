@@ -13,27 +13,27 @@ Meteor.methods({
     return RoleGroup.insert(doc)
   },
   updateRoleGroup(doc) {
-    try {
-      const exist = RoleGroup.findOne({ _id:doc._id,})
-      if (!exist) throw `This recored deleted!`
+    // try {
+    //   const exist = RoleGroup.findOne({ _id:doc._id,})
+    //   if (!exist) throw `This recored deleted!`
 
-      return RoleGroup.update({_id:doc._id, }, { $set: doc })
-    } catch (error: any) {
-      throw new Error('update role group error', error)
-    }
+    //   return RoleGroup.update({_id:doc._id, }, { $set: doc })
+    // } catch (error: any) {
+    //   throw new Error('update role group error', error)
+    // }
   },
   removeRoleGroupById({id}) {
-    try {
-      const exist = RoleGroup.findOne({ _id:id })
-      if (!exist) throw `This recored deleted!`
+    // try {
+    //   const exist = RoleGroup.findOne({ _id:id })
+    //   if (!exist) throw `This recored deleted!`
 
-      const roleG = Meteor.users.findOne({'profile.roleGroup':id})
-      if(roleG) throw `This role has been used`
+    //   const roleG = Meteor.users.findOne({'profile.roleGroup':id})
+    //   if(roleG) throw `This role has been used`
 
-      return RoleGroup.remove({ _id:id })
-    } catch (error: any) {
-      throw new Meteor.Error('delete role group error', error)
-    }
+    //   return RoleGroup.remove({ _id:id })
+    // } catch (error: any) {
+    //   throw new Meteor.Error('delete role group error', error)
+    // }
   },
   removeRoles(){
     return Role.remove()
