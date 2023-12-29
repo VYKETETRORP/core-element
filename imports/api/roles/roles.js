@@ -1,7 +1,7 @@
-import { Mongo } from 'meteor/mongo'
-import SimpleSchema from 'simpl-schema'
+import { Mongo } from "meteor/mongo";
+import SimpleSchema from "simpl-schema";
 
-const Role = new Mongo.Collection('app_roles')
+const Role = new Mongo.Collection("app_roles");
 
 Role.schema = new SimpleSchema({
   name: {
@@ -13,8 +13,8 @@ Role.schema = new SimpleSchema({
   },
   title: String,
   order: Number,
-})
+});
 
-Role.attachSchema(Role.schema)
+Role.attachSchema(Role.schema);
 
-export default Role
+export default Role;

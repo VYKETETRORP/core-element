@@ -8,7 +8,7 @@
       <template #header>
         <i :class="`fas fa-${showId ? 'pencil' : 'plus'}`"></i>
         <span class="ml-2">
-          {{ showId ? "Edit User" : "Add Role Group" }}
+          {{ showId ? "Edit User ok" : "Add Role Group" }}
         </span>
       </template>
       <el-form
@@ -122,10 +122,9 @@
 <script>
 import { cloneDeep, map, startCase } from "lodash";
 // import role from "../../api";
-import { Role } from '../../api/index.js';
+// import { Role } from '../../../api/roles/roles';
 
 export default {
-  name: "RoleGroupForm",
   name: "RoleGroupForm",
   props: {
     visible: {
@@ -144,7 +143,7 @@ export default {
         roles: [],
         status: "Active",
       },
-      role: role,
+   
       statusOpts: [
         { label: "Active", value: "Active" },
         { label: "Inactive", value: "Inactive" },
@@ -166,7 +165,7 @@ export default {
       return this.role;
     },
     roleOpts() {
-      const roleOpts = cloneDeep(this.$store.state.app.lookup.userRole) || {};
+      
     },
   },
   watch: {
@@ -189,61 +188,10 @@ export default {
     },
   },
   methods: {
-    lookupRole() {
-      this.loading = true;
-      this.$store
-        .dispatch("app/lookup/getUserRole", {})
-        .then(() => {
-          // this.loading = false
-        })
-        .catch((err) => {
-          // this.loading = false
-          // this.$store.dispatch('app/messageE', err)
-        });
-    },
-    startCase(val) {
-      return startCase(val);
-    },
-    handleModalClose() {
-      this.$emit("modal-close");
-    },
-    handleCheckAll(val) {
-      this.form.roles = val ? map(this.role, (o) => o.name) : [];
-      this.isIndeterminate = false;
-    },
-    handleCheckRole(value) {
-      if (value.length === this.role.length) {
-        this.checkAll = true;
-        this.indeterminate = true;
-      } else {
-        this.checkAll = false;
-        this.indeterminate = false;
-      }
-    },
-    async onSubmit() {
-      this.$refs["formRef"].validate((valid) => {
-        if (valid) {
-          let methods = "app.insertRoleGroup";
-          if (this.showId) {
-            methods = "app.updateRoleGroup";
-          }
-          Meteor.callAsync(methods, this.form).then((res) => {
-            this.handleModalClose();
-            this.$message({
-              type: "success",
-              message: this.showId
-                ? "Updated Role Group"
-                : "Created Role Group",
-            });
-          });
-        } else {
-          return false;
-        }
-      });
-    },
+  
   },
   mounted() {
-    this.lookupRole();
+  
   },
 };
 </script>

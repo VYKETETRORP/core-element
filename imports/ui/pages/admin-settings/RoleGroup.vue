@@ -67,7 +67,7 @@ export default {
     VueJsonPretty,
     TableToolbar,
     TableAction, 
-    RoleGroupForm,
+    RoleGroupForm
   },
   // mixins: [dataTablesMixin, softRemoveMixin, restoreMixin, removeMixin],
   data() {
