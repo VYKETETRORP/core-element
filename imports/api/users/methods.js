@@ -1,16 +1,17 @@
-import { Meteor } from "meteor/meteor";
-import { Accounts } from "meteor/accounts-base";
-import { ValidatedMethod } from "meteor/mdg:validated-method";
-import SimpleSchema from "simpl-schema";
+import { Meteor } from 'meteor/meteor'
+import { Accounts } from 'meteor/accounts-base'
+import { ValidatedMethod } from 'meteor/mdg:validated-method'
+import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'simpl-schema'
 
-// import rateLimit from '/imports/api/lib/rate-limit'
+import rateLimit from '/imports/api/lib/rate-limit'
 // import RoleGroups from '../roles/RoleGroups'
-import { UserInsertSchema, UserUpdateSchema } from "./users";
+import { UserInsertSchema, UserUpdateSchema } from './users'
 
 // Find
 export const findUsers = new ValidatedMethod({
-  name: "app.findUsers",
-  mixins: [],
+  name: 'app.findUsers',
+  mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     selector: {
       type: Object,
@@ -25,67 +26,44 @@ export const findUsers = new ValidatedMethod({
   }).validator(),
   run({ selector, options }) {
     if (Meteor.isServer) {
-      selector = selector || {};
-      options = options || {};
+      selector = selector || {}
+      options = options || {}
 
-      const users = Meteor.users.aggregate([
-        { $match: selector },
+      let users = Meteor.users.find(selector, options).fetch()
+      users.forEach((o) => {
+        o.groupDoc = RoleGroups.findOne({ _id: o.profile.roleGroup })
+      })
 
-        {
-          $lookup: {
-            from: "app_roleGroups",
-            localField: "profile.roleGroup",
-            foreignField: "_id",
-            as: "groupDoc",
-          },
-        },
-        { $unwind: { path: "$groupDoc", preserveNullAndEmptyArrays: true } },
-        {
-          $group: {
-            _id: "$_id",
-            username: { $last: "$username" },
-            emails: { $last: "$emails" },
-            profile: { $last: "$profile" },
-
-            roleGroup: { $last: "$groupDoc.name" },
-          },
-        },
-      ]);
-      console.log("users", users);
-      return users;
+      return users
     }
   },
-});
+})
 
 // Find One
 export const findOneUser = new ValidatedMethod({
-  name: "app.findOneUser",
-  mixins: [],
+  name: 'app.findOneUser',
+  mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
-    selector: {
-      type: Object,
-      blackbox: true,
-      optional: true,
-    },
+    _id: String,
   }).validator(),
-  run({ selector = {} }) {
+  run({ _id }) {
     if (Meteor.isServer) {
-      return Meteor.users.findOne(selector);
+      return Meteor.users.findOne({ _id })
     }
   },
-});
+})
 
 // Insert
 export const insertUser = new ValidatedMethod({
-  name: "app.insertUser",
-  mixins: [],
+  name: 'app.insertUser',
+  mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     user: UserInsertSchema,
   }).validator(),
   run({ user }) {
     if (Meteor.isServer) {
       // Check role
-      //  userIsInRole(['super', 'admin'])
+      // userIsInRole(['super', 'admin'])
 
       // Add new user
       const userId = Accounts.createUser({
@@ -94,22 +72,24 @@ export const insertUser = new ValidatedMethod({
         password: user.password,
         profile: {
           fullName: user.fullName,
+          expiryDay: user.expiryDay,
+          expiryDate: user.expiryDate,
           status: user.status,
-          //  allowedBranches: user.allowedBranches,
+          allowedBranches: user.allowedBranches,
           roleGroup: user.roleGroup,
           roles: user.roles,
         },
-      });
+      })
 
-      return userId;
+      return userId
     }
   },
-});
+})
 
 // Update
 export const updateUser = new ValidatedMethod({
-  name: "app.updateUser",
-  mixins: [],
+  name: 'app.updateUser',
+  mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     user: UserUpdateSchema,
   }).validator(),
@@ -120,61 +100,51 @@ export const updateUser = new ValidatedMethod({
         {
           $set: {
             username: user.username,
-            "emails.0.address": user.email,
+            'emails.0.address': user.email,
             profile: {
               fullName: user.fullName,
+              expiryDay: user.expiryDay,
+              expiryDate: user.expiryDate,
               status: user.status,
-              //  allowedBranches: user.allowedBranches,
+              allowedBranches: user.allowedBranches,
               roleGroup: user.roleGroup,
               roles: user.roles,
             },
           },
         }
-      );
+      )
 
+      // Update password
       if (user.password) {
-        Accounts.setPassword(user._id, user.password);
+        Accounts.setPassword(user._id, user.password)
+
+        if (user._id === Meteor.userId()) {
+          return 'logout'
+        }
       }
 
-      return "success";
+      return 'success'
     }
   },
-});
+})
 
 // Remove
 export const removeUser = new ValidatedMethod({
-  name: "app.removeUser",
-  mixins: [],
+  name: 'app.removeUser',
+  mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: { type: String },
   }).validator(),
   run({ _id }) {
     if (Meteor.isServer) {
       // Check role
-      //   userIsInRole(['super'])
+      // userIsInRole(['super'])
 
-      return Meteor.users.remove({ _id });
+      return Meteor.users.remove({ _id })
     }
   },
-});
+})
 
-export const validateUserPassword = new ValidatedMethod({
-  name: "app.validateUserPassword",
-  mixins: [],
-  validate: new SimpleSchema({
-    password: String,
-  }).validator(),
-  run({ password }) {
-    if (Meteor.isServer) {
-      let user = Meteor.user();
-      let digest = Package.sha.SHA256(password);
-      let passwordOpts = { digest: digest, algorithm: "sha-256" };
-      let result = Accounts._checkPassword(user, passwordOpts);
-      return result;
-    }
-  },
-});
-
-// rateLimit({
-//   methods: [insertUser, updateUser, removeUser],
-// })
+rateLimit({
+  methods: [insertUser, updateUser, removeUser],
+})

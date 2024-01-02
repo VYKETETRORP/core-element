@@ -198,11 +198,13 @@
   
   // Libs
 //  import LookupValue from '../lib/lookup-value'
+
+ import LookupValue from '../../lib/lookup-value'
   
-  // Methods
-//  import { lookupRoleGroup } from '../../api/lookups/role.js'
-//  import { validateUserExist } from '../../api/validations/user'
-//  import { insertUser, updateUser, removeUser } from '../../api/users/methods'
+//   // Methods
+ import { lookupRoleGroup } from '../../../api/lookups/role.js'
+ import { validateUserExist } from '../../../api/validations/user'
+ import { insertUser, updateUser, removeUser } from '../../../api/users/methods'
   
   // Components
   import {
@@ -421,17 +423,10 @@
     },
     methods: {
       getAllowedBranchOpts() {
-        this.$store.dispatch('app/lookup/getBranch')
+        // this.$store.dispatch('app/lookup/getBranch')
       },
       getRoleGroup() {
-        lookupRoleGroup
-          .callPromise({ selector: { status: 'Active' } })
-          .then((result) => {
-            this.roleGroupOpts = result
-          })
-          .catch((error) => {
-            Notify.error({ message: error })
-          })
+      
       },
       handleGroupChange(val) {
         const group = this.roleGroupOpts.find((o) => o.value === val)

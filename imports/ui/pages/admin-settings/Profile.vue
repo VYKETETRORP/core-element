@@ -102,8 +102,8 @@
 //  import {
 //    validateUserExist,
 //    validateUserPassword,
-//  } from '../../api/validations/user.js'
-//  import { updateUser } from '../../api/users/methods'
+//  } from '../../../api/validations/user.js'
+//  import { updateUser } from '../../../api/users/methods'
   
   // Components
   import {
