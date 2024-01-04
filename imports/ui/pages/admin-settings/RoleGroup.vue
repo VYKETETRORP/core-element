@@ -56,13 +56,13 @@
           </template>
         </el-table-column>
 
-        <!-- <el-table-column prop="roles" label="Roles" sortable>
+        <el-table-column prop="roles" label="Roles" sortable>
           <template #default="scope">
             <span>
               <VueJsonPretty :data="scope.row.roles" />
             </span>
           </template>
-        </el-table-column> -->
+        </el-table-column>
 
         <el-table-column prop="status" label="Status" sortable>
           <template #default="scope">
