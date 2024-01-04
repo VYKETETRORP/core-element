@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <div class="mb-2 flex justify-between">
@@ -42,24 +41,44 @@
     <div>
       <!-- v-model:page="pagination" -->
       <data-table
-   
         v-loading="loading"
         :showIndex="true"
         :data="tableData"
         @getTableData="fetchData"
         @selection-change="handleSelectionChange"
- 
         style="height: calc(100vh - 300px)"
       >
-        <!-- <el-table-column prop="username" label="Username" sortable>
+        <el-table-column prop="name" label="Name" sortable>
           <template #default="scope">
             <span>
-              {{ scope.row.username }}
+              {{ scope.row.name }}
+            </span>
+          </template>
+        </el-table-column>
+
+        <!-- <el-table-column prop="roles" label="Roles" sortable>
+          <template #default="scope">
+            <span>
+              <VueJsonPretty :data="scope.row.roles" />
             </span>
           </template>
         </el-table-column> -->
 
-        <el-table-column prop="name" label="Name" sortable />
+        <el-table-column prop="status" label="Status" sortable>
+          <template #default="scope">
+            <span>
+              {{ scope.row.status }}
+            </span>
+          </template>
+        </el-table-column>
+
+        <!-- <el-table-column prop="name" label="Name" sortable /> -->
+        <!-- <el-table-column prop="roles" label="Roles" sortable /> -->
+        <!-- <el-table-column label="Roles" sortable>
+          <template #default="scope">
+            <VueJsonPretty :data="scope.row.roles" />
+          </template>
+        </el-table-column> -->
 
         <el-table-column
           label="Action"
@@ -110,10 +129,12 @@ import DataTable from "../../components/DataTable.vue";
 import { defineAsyncComponent, nextTick, onMounted, ref } from "vue";
 import { Meteor } from "meteor/meteor";
 import { ElMessage } from "element-plus";
+import VueJsonPretty from "vue-json-pretty";
 export default {
   components: {
     RoleGroupForm,
     DataTable,
+    VueJsonPretty,
   },
   setup() {
     const tableData = ref([]);
@@ -188,7 +209,7 @@ export default {
 
       const res = await Meteor.callAsync("app.removeRoleGroup", {
         // selector: { _id: { $in: ids } },
-        _id: data._id
+        _id: data._id,
       });
       ElMessage({
         type: "success",
