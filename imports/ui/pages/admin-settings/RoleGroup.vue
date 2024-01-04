@@ -59,7 +59,7 @@
         <el-table-column prop="roles" label="Roles" sortable>
           <template #default="scope">
             <span>
-              <VueJsonPretty :data="scope.row.roles" />
+              <VueJsonPretty :data="scope.row.roles"     :deep="0" />
             </span>
           </template>
         </el-table-column>
