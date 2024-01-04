@@ -138,7 +138,7 @@ export default {
             if (this.userExpiryDay <= 0) {
               this.$router.push({ name: 'Confirm' })
             } else {
-              this.$router.push({ name: 'Login' })
+              this.$router.push({ path: 'dashboard' })
             }
           })
           .catch((err) => {

@@ -1,17 +1,9 @@
-// export default {
-//   updateLang({ commit }, value) {
-//     value = value || "en";
-//     commit("UPDATE_LANG", value);
-//   },
-//   UPDATE_LANG(state, value) {
-//     state.lang = value;
-//   },
-// };
+
 import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
 import { Session } from 'meteor/session'
 
-// import { insertAuditLog } from '/imports/api/auditLogs/methods'
+import { insertAuditLog } from '/imports/api/auditLogs/methods'
 
 export default {
   updateCompany({ commit, dispatch }, value) {
@@ -35,22 +27,22 @@ export default {
             commit('UPDATE_CURRENT_USER', Meteor.user())
             // Audit log
             const username = Meteor.user() && Meteor.user().username
-            // insertAuditLog.callPromise({
-            //   page: 'In',
-            //   title: username,
-            //   event: 'LOG',
-            //   data: '',
-            //   refId: '',
-            // })
+            insertAuditLog.callPromise({
+              page: 'In',
+              title: username,
+              event: 'LOG',
+              data: '',
+              refId: '',
+            })
             Meteor.call(
-              // 'app.insertAuditLog',
-              // {
-              //   page: 'In',
-              //   title: username,
-              //   event: 'LOG',
-              //   data: '',
-              //   refId: '',
-              // },
+              'app.insertAuditLog',
+              {
+                page: 'In',
+                title: username,
+                event: 'LOG',
+                data: '',
+                refId: '',
+              },
               (err, res) => {
                 if (res) {
                   return 'Success'
@@ -67,24 +59,24 @@ export default {
   },
   logout({ commit, state, dispatch }) {
     // Audit log before logout
-    // insertAuditLog
-    //   .callPromise({
-    //     page: 'Out',
-    //     title: state.currentUser.username,
-    //     event: 'LOG',
-    //     data: '',
-    //     refId: '',
-    //   })
-    //   .then((res) => {
-    //     Meteor.logout(() => {
-    //       commit('LOGOUT')
-    //       // delete all tag view
-    //       dispatch('app/tagView/delAllViews', null, { root: true })
-    //     })
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
+    insertAuditLog
+      .callPromise({
+        page: 'Out',
+        title: state.currentUser.username,
+        event: 'LOG',
+        data: '',
+        refId: '',
+      })
+      .then((res) => {
+        Meteor.logout(() => {
+          commit('LOGOUT')
+          // delete all tag view
+          dispatch('app/tagView/delAllViews', null, { root: true })
+        })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     Meteor.call(
       // 'app.insertAuditLog',
       // {
@@ -102,7 +94,7 @@ export default {
 
             dispatch('app/tagView/delAllViews', null, { root: true })
             // const router = useRouter();
-            // router.push({ name: '/login' });
+            // router.push({ path: '/login' });
           })
         } else {
           console.log(err)

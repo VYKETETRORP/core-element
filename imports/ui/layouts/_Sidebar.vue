@@ -152,12 +152,20 @@ const logout = () => {
   store.dispatch('app/logout')
     .then(() => {
       console.log('Logout successful');
+      router.push({ path: '/login' });
+
+    
     })  
     .catch((error) => {
       console.error('Logout error:', error);
     });
 };
 
+
+
+// logout() {
+//       this.$store.dispatch('app/logout')
+//     },
 
 // logout() {
 //       this.$store.dispatch('app/logout')
@@ -166,15 +174,6 @@ const logout = () => {
  
 
 
-// const logout = async () => {
-//   try {
-//     // Assuming your Vuex store has a 'logout' action
-//     await store.dispatch('app/logout');
-//     router.push({ name: 'Login' }); // Change 'login' to the actual name of your login route
-//   } catch (error) {
-//     console.error('Logout failed:', error);
-//   }
-// };
 
 const route = useRoute();
 

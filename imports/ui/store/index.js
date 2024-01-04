@@ -6,6 +6,8 @@ import actions from "./actions";
 import sidebar from "./modules/sidebar";
 import tagView from "./modules/tagView";
 
+import lookup from "./modules/lookup"
+
 export default {
   namespaced: true,
   state,
@@ -14,5 +16,6 @@ export default {
   modules: {
     sidebar,
     tagView,
+    lookup,
   },
 };

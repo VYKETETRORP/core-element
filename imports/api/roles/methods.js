@@ -1,92 +1,150 @@
-import { Meteor } from 'meteor/meteor'
-import RoleGroup from "./roleGroup";
-import Role from './roles';
-Meteor.methods({
-  getRoleGroupById(_id) {
-    return RoleGroup.findOne({ _id })
-  },
-  
-  getRoelGroups({selector}){
-    return RoleGroup.find(selector).fetch()
-  },
-  insertRoleGroup(doc) {
-    return RoleGroup.insert(doc)
-  },
-  updateRoleGroup(doc) {
-    // try {
-    //   const exist = RoleGroup.findOne({ _id:doc._id,})
-    //   if (!exist) throw `This recored deleted!`
 
-    //   return RoleGroup.update({_id:doc._id, }, { $set: doc })
-    // } catch (error: any) {
-    //   throw new Error('update role group error', error)
-    // }
-  },
-  removeRoleGroupById({id}) {
-    // try {
-    //   const exist = RoleGroup.findOne({ _id:id })
-    //   if (!exist) throw `This recored deleted!`
+import { ValidatedMethod } from 'meteor/mdg:validated-method'
+import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'simpl-schema'
+import RoleGroups from './RoleGroup'
+import _ from 'lodash'
 
-    //   const roleG = Meteor.users.findOne({'profile.roleGroup':id})
-    //   if(roleG) throw `This role has been used`
-
-    //   return RoleGroup.remove({ _id:id })
-    // } catch (error: any) {
-    //   throw new Meteor.Error('delete role group error', error)
-    // }
-  },
-  removeRoles(){
-    return Role.remove()
-
-  },
-  getRoles( selector ) {
-    return Role.find(selector).fetch()
-  },
-  getRolesValue() {
-    const data = Role.aggregate([
-      {
-          $group:{
-              _id:{group:'$group',title:'$title'},
-              list:{
-                  $push:{
-                      name:'$name'
-                  }
-              },
-              order:{$last:'$order'}
-          }
-      },
-      {
-          $group:{
-              _id:'$_id.group',
-              order:{$last:'$order'},
-              details:{
-                  $push:{
-                      title:'$_id.title',
-                      list:'$list'
-                  }
-              }
-          }
-      },
-      {
-          $sort:{order:1}
-      }
-  ])
-  return data
-  },
-  checkRoleGroupExist({selector}) {
-    return RoleGroup.findOne(selector)
-  },
-  findRoleGroup(){
-    const data =RoleGroup.aggregate([
-      {
-        $project:{
-          name:1,
-          roles:1,
-          status:1,
+// Insert
+export const insertRoleGroup = new ValidatedMethod({
+    name: 'app.insertRoleGroup',
+    mixins: [CallPromiseMixin],
+    validate: RoleGroups.schema.validator(),
+    run(doc) {
+      if (Meteor.isServer) {
+        try {
+          return RoleGroups.insert(doc)
+        } catch (error) {
+          throwError('Role Group Insert', error, doc)
         }
       }
-    ])
-    //console.log('Role data',data)
-    return data
-  }
+    },
+  })
+
+  
+
+  // Find
+export const findRoleGroups = new ValidatedMethod({
+  name: 'app.findRoleGroup',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    selector: {
+      type: Object,
+      blackbox: true,
+      optional: true,
+    },
+    options: {
+      type: Object,
+      blackbox: true,
+      optional: true,
+    },
+  }).validator(),
+  run({ selector, options }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      options = options || {}
+
+      const roleGroups = RoleGroups.find(selector, options).fetch()
+      return roleGroups
+    }
+  },
+})
+// Check group is used
+export const checkRoleGroupIsUsed = new ValidatedMethod({
+  name: 'app.checkRoleGroupIsUsed',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    selector: {
+      type: Object,
+      blackbox: true,
+      optional: true,
+    },
+    options: {
+      type: Object,
+      blackbox: true,
+      optional: true,
+    },
+  }).validator(),
+  run({ selector, options }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      options = options || {}
+      return Meteor.users.findOne(selector, options)
+    }
+  },
+})
+
+  
+
+// Find One
+export const findOneRoleGroup = new ValidatedMethod({
+  name: 'app.findOneRoleGroup',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    selector: {
+      type: Object,
+      blackbox: true,
+      optional: true,
+    },
+    options: {
+      type: Object,
+      blackbox: true,
+      optional: true,
+    },
+  }).validator(),
+  run({ selector, options }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      options = options || {}
+      return RoleGroups.findOne(selector, options)
+    }
+  },
+})
+
+
+// Update
+export const updateRoleGroup = new ValidatedMethod({
+  name: 'app.updateRoleGroup',
+  mixins: [CallPromiseMixin],
+  validate: _.clone(RoleGroups.schema)
+    .extend({
+      _id: String,
+    })
+    .validator(),
+  run(doc) {
+    if (Meteor.isServer) {
+      const groupId = doc._id // Bc after update, it will delete doc._id
+      const result = RoleGroups.update({ _id: doc._id }, { $set: doc })
+
+      // Update user by roleGroup
+      if (result) {
+        Meteor.users.update(
+          { 'profile.roleGroup': groupId },
+          {
+            $set: {
+              'profile.roles': doc.roles,
+            },
+          },
+          { multi: true }
+        )
+      }
+
+      return result
+    }
+  },
+})
+
+
+// Remove
+export const removeRoleGroup = new ValidatedMethod({
+  name: 'app.removeRoleGroup',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    _id: { type: String },
+  }).validator(),
+  run(selector) {
+    if (Meteor.isServer) {
+      return RoleGroups.remove(selector)
+    }
+  },
 })
