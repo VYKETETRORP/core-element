@@ -2,7 +2,7 @@
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import SimpleSchema from 'simpl-schema'
-import RoleGroups from './RoleGroup'
+import RoleGroups from './roleGroup'
 import _ from 'lodash'
 
 // Insert

@@ -39,12 +39,13 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item prop="roles" label="Role">
+            <el-form-item  prop="roles" label="Role">
               <el-checkbox
                 v-model="checkAll"
                 :indeterminate="isIndeterminate"
                 border
                 @change="handleCheckAll"
+               
               >
                 Check All
               </el-checkbox>

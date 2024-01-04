@@ -51,7 +51,7 @@
             <el-form-item
               :rules="rules.customerType"
               :label="$t('app.customer.Customer Type')"
-              prop="customerType"
+            
             >
               <el-select
                 v-model="form.customerType"
@@ -78,7 +78,7 @@
             <el-form-item
               :rules="rules.Employee"
               :label="$t('app.customer.Employee')"
-              prop="Employee"
+            
             >
               <el-select
                 v-model="form.EmployeeType"
@@ -97,7 +97,7 @@
             <el-form-item
               :rules="rules.defaultPrice"
               :label="$t('app.customer.Default Price')"
-              prop="defaultPrice"
+        
             >
               <el-radio-group v-model="defaultPrice">
                 <el-radio label="1" border>Retail Price</el-radio>
@@ -108,7 +108,7 @@
             <el-form-item
               :rules="rules.status"
               :label="$t('app.customer.Status')"
-              prop="status"
+           
             >
               <el-radio-group v-model="status">
                 <el-radio label="1" border>Active</el-radio>
@@ -327,7 +327,7 @@
                 <el-form-item
                   :rules="rules.paymentTerm"
                   :label="$t('app.customer.Payment Term')"
-                  prop="setting.paymentTerm"
+                  prop="paymentTerm"
                 >
                   <el-select placeholder="Select" style="width: 100%">
                     <el-option

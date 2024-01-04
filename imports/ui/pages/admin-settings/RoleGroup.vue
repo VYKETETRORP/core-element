@@ -1,3 +1,109 @@
+
+<template>
+  <div>
+    <div class="mb-2 flex justify-between">
+      <div>
+        <el-button type="primary" @click="addNew()">
+          <template #icon>
+            <i class="fas fa-plus"></i>
+          </template>
+          Add New
+        </el-button>
+        <!-- <el-popconfirm
+          :title="`Remove user(${chooseData.length}) ?`"
+          width="180"
+          @confirm="handleDel(chooseData)"
+        >
+          <template #reference>
+            <el-button type="danger" :disabled="chooseData.length === 0">
+              <template #icon>
+                <i class="fas fa-trash-alt"></i>
+              </template>
+              <span> remove ({{ chooseData.length }}) </span>
+            </el-button>
+          </template>
+        </el-popconfirm> -->
+      </div>
+      <div class="form-search">
+        <el-input
+          type="text"
+          v-model="search"
+          @change="fetchData(true)"
+          placeholder="search"
+        />
+        <el-button type="primary" @click="fetchData(true)">
+          <template #icon>
+            <i class="fas fa-search"></i>
+          </template>
+          <span>Search</span>
+        </el-button>
+      </div>
+    </div>
+    <div>
+      <!-- v-model:page="pagination" -->
+      <data-table
+   
+        v-loading="loading"
+        :showIndex="true"
+        :data="tableData"
+        @getTableData="fetchData"
+        @selection-change="handleSelectionChange"
+ 
+        style="height: calc(100vh - 300px)"
+      >
+        <!-- <el-table-column prop="username" label="Username" sortable>
+          <template #default="scope">
+            <span>
+              {{ scope.row.username }}
+            </span>
+          </template>
+        </el-table-column> -->
+
+        <el-table-column prop="name" label="Name" sortable />
+
+        <el-table-column
+          label="Action"
+          align="center"
+          fixed="right"
+          width="200"
+        >
+          <template #default="scope">
+            <el-button
+              type="primary"
+              size="small"
+              circle
+              @click="handleEdit(scope.row)"
+            >
+              <template #icon>
+                <i class="fas fa-pencil"></i>
+              </template>
+            </el-button>
+            <el-popconfirm
+              title="Are you sure delete the selection data ?"
+              @confirm="handleDel(scope.row)"
+              width="200px"
+            >
+              <template #reference>
+                <el-button type="danger" size="small" circle>
+                  <template #icon>
+                    <i class="fas fa-trash"></i>
+                  </template>
+                </el-button>
+              </template>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
+      </data-table>
+    </div>
+    <!--Modal Form-->
+    <component
+      :is="currentModal"
+      :visible="modalVisible"
+      @modal-close="handleModalClose"
+      :show-id="showId"
+    />
+  </div>
+</template>
 <script>
 import RoleGroupForm from "./RoleGroupForm.vue";
 import DataTable from "../../components/DataTable.vue";
@@ -121,112 +227,6 @@ export default {
   },
 };
 </script>
-<template>
-  <div>
-    <div class="mb-2 flex justify-between">
-      <div>
-        <el-button type="primary" @click="addNew()">
-          <template #icon>
-            <i class="fas fa-plus"></i>
-          </template>
-          Add New
-        </el-button>
-        <!-- <el-popconfirm
-          :title="`Remove user(${chooseData.length}) ?`"
-          width="180"
-          @confirm="handleDel(chooseData)"
-        >
-          <template #reference>
-            <el-button type="danger" :disabled="chooseData.length === 0">
-              <template #icon>
-                <i class="fas fa-trash-alt"></i>
-              </template>
-              <span> remove ({{ chooseData.length }}) </span>
-            </el-button>
-          </template>
-        </el-popconfirm> -->
-      </div>
-      <div class="form-search">
-        <el-input
-          type="text"
-          v-model="search"
-          @change="fetchData(true)"
-          placeholder="search"
-        />
-        <el-button type="primary" @click="fetchData(true)">
-          <template #icon>
-            <i class="fas fa-search"></i>
-          </template>
-          <span>Search</span>
-        </el-button>
-      </div>
-    </div>
-    <div>
-      <!-- v-model:page="pagination" -->
-      <data-table
-   
-        v-loading="loading"
-        :showIndex="true"
-        :data="tableData"
-        @getTableData="fetchData"
-        @selection-change="handleSelectionChange"
- 
-        style="height: calc(100vh - 300px)"
-      >
-        <!-- <el-table-column prop="username" label="Username" sortable>
-          <template #default="scope">
-            <span>
-              {{ scope.row.username }}
-            </span>
-          </template>
-        </el-table-column> -->
-
-        <el-table-column prop="name" label="Name" sortable />
-
-        <el-table-column
-          label="Action"
-          align="center"
-          fixed="right"
-          width="200"
-        >
-          <template #default="scope">
-            <el-button
-              type="primary"
-              size="small"
-              circle
-              @click="handleEdit(scope.row)"
-            >
-              <template #icon>
-                <i class="fas fa-pencil"></i>
-              </template>
-            </el-button>
-            <el-popconfirm
-              title="Are you sure delete the selection data ?"
-              @confirm="handleDel(scope.row)"
-              width="200px"
-            >
-              <template #reference>
-                <el-button type="danger" size="small" circle>
-                  <template #icon>
-                    <i class="fas fa-trash"></i>
-                  </template>
-                </el-button>
-              </template>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </data-table>
-    </div>
-    <!--Modal Form-->
-    <component
-      :is="currentModal"
-      :visible="modalVisible"
-      @modal-close="handleModalClose"
-      :show-id="showId"
-    />
-  </div>
-</template>
-
 <style lang="scss" scoped>
 .form-search {
   display: flex;
