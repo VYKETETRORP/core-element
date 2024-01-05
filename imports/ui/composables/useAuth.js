@@ -1,7 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
-
+import {router} from "/imports/ui/router.ts"
 export default () => {
   const { router } = useRouter();
   const loading = ref(false);
@@ -32,7 +32,7 @@ export default () => {
         error.value = err.reason;
       } else {
         error.value = null;
-        //router.push("/login");
+        router.push("/login");
       }
     });
   };

@@ -1,4 +1,5 @@
-import { Session } from "meteor/session";
+import { Meteor } from 'meteor/meteor'
+import { Session } from 'meteor/session'
 
 export default {
   namespaced: true,

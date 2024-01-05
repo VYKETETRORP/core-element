@@ -146,8 +146,8 @@ export default {
 
     // pagination
     const pagination = ref({
-      // sortBy: 'name',
-      // descending: false,
+      sortBy: 'name',
+      descending: false,
       currentPage: 1,
       size: 20,
       total: 0,

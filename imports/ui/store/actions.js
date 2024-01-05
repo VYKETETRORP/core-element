@@ -58,25 +58,14 @@ export default {
     })
   },
   logout({ commit, state, dispatch }) {
-    // Audit log before logout
-    insertAuditLog
-      .callPromise({
-        page: 'Out',
-        title: state.currentUser.username,
-        event: 'LOG',
-        data: '',
-        refId: '',
-      })
-      .then((res) => {
+   
         Meteor.logout(() => {
           commit('LOGOUT')
           // delete all tag view
           dispatch('app/tagView/delAllViews', null, { root: true })
         })
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+      
+      
     Meteor.call(
       // 'app.insertAuditLog',
       // {
@@ -86,8 +75,7 @@ export default {
       //   data: '',
       //   refId: '',
       // },
-      (err, res) => {
-        if (res) {
+      
           Meteor.logout(() => {
             commit('LOGOUT')
             // delete all tag view
@@ -96,10 +84,8 @@ export default {
             // const router = useRouter();
             // router.push({ path: '/login' });
           })
-        } else {
-          console.log(err)
-        }
-      }
+        
+      
     )
   },
   loadCurrentUser({ commit }) {

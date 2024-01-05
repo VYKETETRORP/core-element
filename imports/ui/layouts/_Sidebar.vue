@@ -125,7 +125,10 @@
             </div>
             <div class="content">
               <span>Super</span>
-              <span> {{ "Unknown" }} </span>
+              <span>
+                {{ currentUser?.profile.roleGroup }}
+              </span>
+              <!-- <span> {{ "Unknown" }} </span> -->
             </div>
             <div class="logout-wrapper">
               <el-button :loading="loading" class="logout-btn" @click="logout">
@@ -145,16 +148,28 @@ import { useStore } from "vuex";
 import { findIndex, map, without } from "lodash";
 import useAuth from "../composables/useAuth";
 import { sidebarMenu } from "/imports/navmenu";
-
+// const { loading, logout }  = useAuth();
 const { loading } = useAuth();
 const store = useStore();
+// const logout = () => {
+//   store.dispatch('app/logout')
+//     .then(() => {
+//       console.log('Logout successful');
+//       router.push({ path: '/login' });
+
+    
+//     })  
+//     .catch((error) => {
+//       console.error('Logout error:', error);
+//     });
+// };
+
 const logout = () => {
+  console.log('Starting logout process');
   store.dispatch('app/logout')
     .then(() => {
       console.log('Logout successful');
-      router.push({ path: '/login' });
-
-    
+  
     })  
     .catch((error) => {
       console.error('Logout error:', error);
@@ -188,6 +203,7 @@ const activeParent = computed(() => store.state.app.sidebar.activeParent);
 const activeChildIndex = computed(
   () => store.state.app.sidebar.activeChildIndex
 );
+const currentUser = computed(() => store.getters["app/currentUser"]);
 
 const linkActive = computed(() => store.state.app.tagView.linkActive);
 
@@ -210,7 +226,7 @@ const menu = ref<any[]>([
 // logout() {
 //       this.$store.dispatch('app/logout')
 //     },
-
+store.dispatch("app/loadCurrentUser");
 
 const sidebarMenuItems = computed(() => {
   return menu.value;

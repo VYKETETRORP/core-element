@@ -1,14 +1,12 @@
-import { Meteor } from 'meteor/meteor'
-import { Accounts } from 'meteor/accounts-base'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import SimpleSchema from 'simpl-schema'
-
-import rateLimit from '/imports/api/lib/rate-limit'
+import { Meteor } from "meteor/meteor";
+import { Accounts } from "meteor/accounts-base";
+import { ValidatedMethod } from "meteor/mdg:validated-method";
+import { CallPromiseMixin } from "meteor/didericis:callpromise-mixin";
+import SimpleSchema from "simpl-schema";
 
 // Use exist
 export const validateUserExist = new ValidatedMethod({
-  name: 'app.validateUserExist',
+  name: "app.validateUserExist",
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     selector: {
@@ -18,30 +16,26 @@ export const validateUserExist = new ValidatedMethod({
   }).validator(),
   run({ selector }) {
     if (Meteor.isServer) {
-      return Meteor.users.findOne(selector)
+      return Meteor.users.findOne(selector);
     }
   },
-})
+});
 
 // User password
 export const validateUserPassword = new ValidatedMethod({
-  name: 'app.validateUserPassword',
+  name: "app.validateUserPassword",
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     password: String,
   }).validator(),
   run({ password }) {
     if (Meteor.isServer) {
-      let user = Meteor.user()
-      let digest = Package.sha.SHA256(password)
-      let passwordOpts = { digest: digest, algorithm: 'sha-256' }
-      let result = Accounts._checkPassword(user, passwordOpts)
+      let user = Meteor.user();
+      let digest = Package.sha.SHA256(password);
+      let passwordOpts = { digest: digest, algorithm: "sha-256" };
+      let result = Accounts._checkPassword(user, passwordOpts);
 
-      return result
+      return result;
     }
   },
-})
-
-rateLimit({
-  methods: [],
-})
+});

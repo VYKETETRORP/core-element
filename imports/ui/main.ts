@@ -52,16 +52,16 @@ app.mount("#app");
  * Navigation Guards
  **/
 
-//router.beforeEach((to, from, next) => {
-//  const isPublic = to.matched.some((record) => record.meta.public);
+router.beforeEach((to, from, next) => {
+ const isPublic = to.matched.some((record) => record.meta.public);
 
-//  if (isPublic) {
-//    next();
-//  } else {
-//    if (Meteor.userId()) {
-//      next();
-//    } else {
-//      next("/login");
-//    }
-//  }
-//});
+ if (isPublic) {
+   next();
+ } else {
+   if (Meteor.userId()) {
+     next();
+   } else {
+     next("/login");
+   }
+ }
+});
