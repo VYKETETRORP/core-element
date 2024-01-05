@@ -124,10 +124,11 @@
               <el-avatar size="default"></el-avatar>
             </div>
             <div class="content">
-              <span>Super</span>
               <span>
-                {{ currentUser?.profile.roleGroup }}
-              </span>
+                <p v-if="currentUser">{{ currentUser.profile.fullName }}</p>
+                <p v-else>Unknown</p></span
+              >
+              <span> </span>
               <!-- <span> {{ "Unknown" }} </span> -->
             </div>
             <div class="logout-wrapper">
@@ -151,48 +152,15 @@ import { sidebarMenu } from "/imports/navmenu";
 // const { loading, logout }  = useAuth();
 const { loading } = useAuth();
 const store = useStore();
-// const logout = () => {
-//   store.dispatch('app/logout')
-//     .then(() => {
-//       console.log('Logout successful');
-//       router.push({ path: '/login' });
-
-    
-//     })  
-//     .catch((error) => {
-//       console.error('Logout error:', error);
-//     });
-// };
-
-const logout = () => {
-  console.log('Starting logout process');
-  store.dispatch('app/logout')
-    .then(() => {
-      console.log('Logout successful');
-  
-    })  
-    .catch((error) => {
-      console.error('Logout error:', error);
-    });
-};
-
-
-
-// logout() {
-//       this.$store.dispatch('app/logout')
-//     },
-
-// logout() {
-//       this.$store.dispatch('app/logout')
-//     },
-
- 
-
-
 
 const route = useRoute();
 
 const router = useRouter();
+
+const currentUser = computed(() => store.state.app.currentUser);
+
+// const userFullName = computed(()=>store.getters["app/userFullName"]);
+const userFullName = computed(() => store.getters["app/userFullName"]);
 
 const defaultActive = computed(() => route.name || "Dashboard");
 
@@ -203,7 +171,7 @@ const activeParent = computed(() => store.state.app.sidebar.activeParent);
 const activeChildIndex = computed(
   () => store.state.app.sidebar.activeChildIndex
 );
-const currentUser = computed(() => store.getters["app/currentUser"]);
+// const currentUser = computed(() => store.getters["app/currentUser"]);
 
 const linkActive = computed(() => store.state.app.tagView.linkActive);
 
@@ -223,14 +191,24 @@ const menu = ref<any[]>([
   },
 ]);
 
-// logout() {
-//       this.$store.dispatch('app/logout')
-//     },
 store.dispatch("app/loadCurrentUser");
 
 const sidebarMenuItems = computed(() => {
   return menu.value;
 });
+
+const logout = () => {
+  console.log("Starting logout process");
+  store
+    .dispatch("app/logout")
+    .then(() => {
+      console.log("Logout successful");
+    })
+    .catch((error) => {
+      console.error("Logout error:", error);
+    });
+};
+
 // const logout = () => {
 //   props.$store.dispatch('app/logout');
 //   // You can emit an event if needed

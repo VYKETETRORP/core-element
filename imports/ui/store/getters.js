@@ -8,5 +8,9 @@ export default {
   },
   currentUser (state) {
     return state.currentUser && state.currentUser;
-  }
+  },
+
+  userFullName(state) {
+    return state.currentUser ? state.currentUser.profile.fullName : 'Unknown'
+  },
 };
