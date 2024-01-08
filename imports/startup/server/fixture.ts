@@ -7,14 +7,16 @@ Meteor.startup(async () => {
   if (!superAccount) {
 
     const user = {
-      username: 'super',
+      username: 'keke',
       email: 'super@rabbit.com',
     
       password: '123456',
       profile: {
         fullName: 'Super',
-        status: 'Active',     
-      },
+        status: 'Active',  
+        "roles": ["super"]
+   
+      },   
     }
     Accounts.createUser(user)
   }

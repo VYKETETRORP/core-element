@@ -128,8 +128,8 @@
                 <p v-if="currentUser">{{ currentUser.profile.fullName }}</p>
                 <p v-else>Unknown</p></span
               >
-              <span> </span>
-              <!-- <span> {{ "Unknown" }} </span> -->
+              <span>{{ currentUser?.profile.roleGroup }} </span>
+              
             </div>
             <div class="logout-wrapper">
               <el-button :loading="loading" class="logout-btn" @click="logout">
@@ -143,12 +143,15 @@
   </el-aside>
 </template>
 <script lang="ts" setup>
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch,onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { findIndex, map, without } from "lodash";
 import useAuth from "../composables/useAuth";
 import { sidebarMenu } from "/imports/navmenu";
+
+import { findOneRoleGroup } from '../../api/roles/methods'
+
 // const { loading, logout }  = useAuth();
 const { loading } = useAuth();
 const store = useStore();
@@ -209,11 +212,36 @@ const logout = () => {
     });
 };
 
-// const logout = () => {
-//   props.$store.dispatch('app/logout');
-//   // You can emit an event if needed
-//   emit('logout');
-// };
+
+
+const roleGroupName = ref<string | null>(null);
+const currentUserProfile = ref<any>(null); // Adjust the type based on your actual user profile structure
+
+
+const getUserRoleGroup = async () => {
+  if (currentUserProfile.value?.roleGroup === 'super') {
+    roleGroupName.value = 'Super';
+    return;
+  }
+
+  const roleGroupId = currentUserProfile.value?.roleGroup || null;
+  if (!roleGroupId) {
+    roleGroupName.value = null;
+    return;
+  }
+
+  try {
+    const result = await findOneRoleGroup.callPromise({ selector: { _id: roleGroupId } });
+    roleGroupName.value = result?.name || null;
+  } catch (error) {
+    // Assuming Notify is a global object or imported from a notification library
+    Notify.error({ message: error });
+  }
+};
+
+// Call getUserRoleGroup on component mount
+onMounted(getUserRoleGroup);
+
 watch(
   () => route,
   (route) => {
