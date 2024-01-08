@@ -1,257 +1,190 @@
 <template>
   <div>
-    <div class="mb-2 flex justify-between">
-      <div>
-        <el-button type="primary" @click="addNew()">
-          <template #icon>
-            <i class="fas fa-plus"></i>
-          </template>
-          Add New
-        </el-button>
-        <!-- <el-popconfirm
-          :title="`Remove user(${chooseData.length}) ?`"
-          width="180"
-          @confirm="handleDel(chooseData)"
-        >
-          <template #reference>
-            <el-button type="danger" :disabled="chooseData.length === 0">
-              <template #icon>
-                <i class="fas fa-trash-alt"></i>
-              </template>
-              <span> remove ({{ chooseData.length }}) </span>
-            </el-button>
-          </template>
-        </el-popconfirm> -->
-      </div>
-      <div class="form-search">
-        <el-input
-          type="text"
-          v-model="search"
-          @change="fetchData(true)"
-          placeholder="search"
-        />
-        <el-button type="primary" @click="fetchData(true)">
-          <template #icon>
-            <i class="fas fa-search"></i>
-          </template>
-          <span>Search</span>
-        </el-button>
-      </div>
-    </div>
-    <div>
-      <!-- v-model:page="pagination" -->
-      <data-table
-        v-loading="loading"
-        :showIndex="true"
-        :data="tableData"
-        @getTableData="fetchData"
-        @selection-change="handleSelectionChange"
-        style="height: calc(100vh - 300px)"
-      >
-        <el-table-column prop="name" label="Name" sortable>
-          <template #default="scope">
-            <span>
-              {{ scope.row.name }}
-            </span>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="roles" label="Roles" sortable>
-          <template #default="scope">
-            <span>
-              <VueJsonPretty :data="scope.row.roles"     :deep="0" />
-            </span>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="status" label="Status" sortable>
-          <template #default="scope">
-            <span>
-              {{ scope.row.status }}
-            </span>
-          </template>
-        </el-table-column>
-
-        <!-- <el-table-column prop="name" label="Name" sortable /> -->
-        <!-- <el-table-column prop="roles" label="Roles" sortable /> -->
-        <!-- <el-table-column label="Roles" sortable>
-          <template #default="scope">
-            <VueJsonPretty :data="scope.row.roles" />
-          </template>
-        </el-table-column> -->
-
-        <el-table-column
-          label="Action"
-          align="center"
-          fixed="right"
-          width="200"
-        >
-          <template #default="scope">
-            <el-button
-              type="primary"
-              size="small"
-              circle
-              @click="handleEdit(scope.row)"
-            >
-              <template #icon>
-                <i class="fas fa-pencil"></i>
-              </template>
-            </el-button>
-            <el-popconfirm
-              title="Are you sure delete the selection data ?"
-              @confirm="handleDel(scope.row)"
-              width="200px"
-            >
-              <template #reference>
-                <el-button type="danger" size="small" circle>
-                  <template #icon>
-                    <i class="fas fa-trash"></i>
-                  </template>
-                </el-button>
-              </template>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </data-table>
-    </div>
     <!--Modal Form-->
     <component
       :is="currentModal"
+      :form-type="formType"
+      :update-doc="updateDoc"
       :visible="modalVisible"
       @modal-close="handleModalClose"
-      :show-id="showId"
     />
+
+    <!-- Toolbar -->
+    <TableToolbar
+      v-model="tableFilters"
+      @new="addNew"
+    />
+
+    <!-- Data Table -->
+    <DataTables
+      v-loading="loading"
+      :data="tableData"
+      :table-props="tableProps"
+      :filters="tableFilters"
+      :pagination-props="tablePagination"
+      style="height: calc(100vh - 320px)"
+    >
+      <el-table-column
+        v-for="title in tableTitles"
+        :key="title.label"
+        :prop="title.prop"
+        :label="title.label"
+        sortable="custom"
+      >
+        <template #default="scope">
+          <span
+            v-if="title.prop === 'name'"
+            class="ra-text-link"
+            @click="edit(scope.row)"
+          >
+            {{ scope.row.name }}
+          </span>
+          <span v-else-if="title.prop === 'roles'">
+            <VueJsonPretty
+              :data="scope.row[title.prop]"
+              :deep="0"
+            />
+          </span>
+          <span v-else>
+            {{ scope.row[title.prop] }}
+          </span>
+        </template>
+      </el-table-column>
+    </DataTables>
   </div>
 </template>
+
 <script>
-import RoleGroupForm from "./RoleGroupForm.vue";
-import DataTable from "../../components/DataTable.vue";
-import { defineAsyncComponent, nextTick, onMounted, ref } from "vue";
-import { Meteor } from "meteor/meteor";
-import { ElMessage } from "element-plus";
-import VueJsonPretty from "vue-json-pretty";
+import VueJsonPretty from 'vue-json-pretty'
+
+// Message
+import Msg from '/imports/ui/lib/message'
+import Notify from '/imports/ui/lib/notify'
+
+
+
+// Table
+import TableToolbar from '/imports/ui/components/TableToolbar.vue'
+import TableAction from '/imports/ui/components/TableAction.vue'
+
+// Method
+import { findRoleGroups, removeRoleGroup } from '../../../api/roles/methods'
+
+// Component
+import RoleGroupForm from './RoleGroupForm.vue'
+// import RoleGroupForm from './RoleGroupForm'
+import { ElTableColumn } from 'element-plus'
+
+// Component
+// import DataTables from './../components/DataTable.vue'
+// import DataTables from '../../components/DataTable.veu'
+import DataTables from "../../components/DataTable.vue";
 export default {
+  name: 'RoleGroup',
   components: {
-    RoleGroupForm,
-    DataTable,
+    [ElTableColumn.name]: ElTableColumn,
+    DataTables,
     VueJsonPretty,
+    TableToolbar,
+    TableAction,
+    RoleGroupForm,
   },
-  setup() {
-    const tableData = ref([]);
-    const currentModal = ref(null);
-    const modalVisible = ref(false);
-    const loading = ref(false);
-    const chooseData = ref([]);
-    const showId = ref(null);
-
-    // pagination
-    const pagination = ref({
-      sortBy: 'name',
-      descending: false,
-      currentPage: 1,
-      size: 20,
-      total: 0,
-    });
-
-    const search = ref(null);
-
-    const addNew = () => {
-      modalVisible.value = true;
-      currentModal.value = "RoleGroupForm";
-    };
-
-    const handleModalClose = () => {
-      modalVisible.value = false;
-      currentModal.value = null;
-      nextTick(() => {
-        showId.value = null;
-        fetchData(tableData.value.length === 1 ? true : false);
-      });
-    };
-
-    const fetchData = async (init) => {
-      loading.value = true;
-      if (init) {
-        pagination.value.currentPage = 1;
-      }
-      const { currentPage, size } = pagination.value;
-
-      const selector = {
-        username: { $ne: "Super" },
-      };
-      let exp = new RegExp(search.value);
-      const query = {};
-      if (search.value) {
-        selector["$or"] = [{ username: { $regex: exp, $options: "i" } }];
-      }
-
-      const options = {};
-      const res = await Meteor.callAsync("app.findRoleGroup", {
-        selector,
-        options,
-        // page: currentPage,
-        // rowsPerPage: size,
-      });
-      // console.log(res);
-      tableData.value = res;
-      // pagination.value.total = total;
-      loading.value = false;
-    };
-
-    const handleSelectionChange = (val) => {
-      chooseData.value = val;
-    };
-    const handleDel = async (data) => {
-      // let ids = data
-      //   .map((e) => e._id)
-      //   .join(",")
-      //   .split(",");
-
-      const res = await Meteor.callAsync("app.removeRoleGroup", {
-        // selector: { _id: { $in: ids } },
-        _id: data._id,
-      });
-      ElMessage({
-        type: "success",
-        message: "Deleted!",
-      });
-      fetchData(tableData.value.length === 1 ? true : false);
-    };
-
-    const handleEdit = (row) => {
-      currentModal.value = "RoleGroupForm";
-      modalVisible.value = true;
-
-      nextTick(() => {
-        showId.value = row._id;
-      });
-    };
-    onMounted(() => {
-      fetchData();
-    });
+  // mixins: [dataTablesMixin, softRemoveMixin, restoreMixin, removeMixin],
+  data() {
     return {
-      currentModal,
-      modalVisible,
-      addNew,
-      handleModalClose,
-      tableData,
-      loading,
-      pagination,
-      fetchData,
-      search,
-      handleSelectionChange,
-      chooseData,
-      handleDel,
-      handleEdit,
-      showId,
-    };
+      loading: false,
+      formType: 'New',
+      tableData: [],
+      tableTitles: [
+        // { label: 'ID', prop: '_id' },
+        { label: `${this.$t('app.groupRole.Name')}`, prop: 'name' },
+        { label: `${this.$t('app.groupRole.Roles')}`, prop: 'roles' },
+        { label: `${this.$t('app.groupRole.Status')}`, prop: 'status' },
+      ],
+      tableFilters: [
+        {
+          prop: ['name', 'status'],
+          value: '',
+        },
+      ],
+      tablePagination: {
+        pageSizes: [10, 20, 50,100],
+        pagerCount: 5,
+        layout: 'prev, pager, next,jumper,sizes,total',
+      },
+      // Modal
+      currentModal: null,
+      modalVisible: false,
+      updateDoc: null,
+    }
   },
-};
-</script>
-<style lang="scss" scoped>
-.form-search {
-  display: flex;
-  gap: 6px;
-  align-items: center;
+  created() {
+    // Extend data tables props (Mixin)
+    // this.tableProps.defaultSort = {
+    //   prop: '_id',
+    //   order: 'ascending',
+    // }
+  },
+  mounted() {
+    this.getData()
+  },
+  methods: {
+    getData() {
+      this.loading = true
+      findRoleGroups
+        .callPromise({})
+        .then((result) => {
+          this.tableData = result
+          this.loading = false
+          //console.log('role group', result)
+        })
+        .catch((error) => {
+          this.loading = false
+          Notify.error({ message: error })
+        })
+    },
+    // Add new
+    addNew() {
+      this.formType = 'New'
+      this.currentModal = 'RoleGroupForm'
+      this.$nextTick(() => {
+        this.modalVisible = true
+      })
+    },
+
+    // Table Action
+    edit(row) {
+      this.formType = 'Edit'
+      this.updateDoc = row
+      this.currentModal = 'RoleGroupForm'
+      this.$nextTick(() => {
+        this.modalVisible = true
+      })
+    },
+    remove(row) {
+      this.$_removeMixin({
+        meteorMethod: removeRoleGroup,
+        selector: { _id: row._id },
+        successMethod: 'getData',
+        loading: 'loading',
+        title: row.title,
+      })
+    },
+    handleModalClose() {
+      this.modalVisible = false
+      this.$nextTick(() => {
+        this.currentModal = null
+        this.updateDoc = null
+        this.getData()
+      })
+    },
+  },
 }
+</script>
+
+<style
+  lang="scss"
+  scoped
+>
+@import '../../styles/main.scss';
 </style>
