@@ -2,18 +2,18 @@
   <div>
     <el-dialog
       :model-value="visible"
+      width="70%"
       :before-close="handleModalClose"
-      width="80%"
     >
-      <!-- Dialog Title -->
       <template #header>
-        <i :class="'fas fa-' + (formType === 'New' ? 'plus' : 'pencil-alt')" />
-        {{ $t('app.groupRole.Role Group') }}
+        <i :class="`fas fa-${showId ? 'pencil' : 'plus'}`"></i>
+        <span class="ml-2">
+          {{ showId ? "Edit User" : "Add Role Group" }}
+        </span>
       </template>
       <el-form
-        ref="form"
-        v-loading="loading"
         :model="form"
+        ref="formRef"
         :rules="rules"
         label-width="100px"
         label-position="top"
@@ -21,463 +21,229 @@
         <el-row :gutter="10">
           <el-col :span="24">
             <el-row :gutter="20">
-              <el-col
-                :xs="24"
-                :sm="24"
-                :md="12"
-                :lg="12"
-                :xl="12"
-              >
-                <el-form-item
-                  :label="$t('app.groupRole.Name')"
-                  prop="name"
-                >
-                  <el-input v-model="form.name" />
+              <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                <el-form-item prop="name" label="Name">
+                  <el-input v-model="form.name" placeholder="Name" />
                 </el-form-item>
               </el-col>
-              <el-col
-                :xs="24"
-                :sm="24"
-                :md="12"
-                :lg="12"
-                :xl="12"
-              >
-                <el-form-item
-                  :label="$t('app.groupRole.Status')"
-                  prop="status"
-                >
+              <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                <el-form-item prop="status" label="Status">
                   <el-radio-group v-model="form.status">
                     <el-radio
-                      v-for="item in statusOpts"
-                      :key="item.value"
-                      :label="item.label"
                       border
-                    />
+                      v-for="status in statusOpts"
+                      :key="status.value"
+                      :label="status.label"
+                    ></el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-col>
             </el-row>
-
-            <el-form-item
-              :label="$t('app.groupRole.Roles')"
-              prop="roles"
-            >
+            <el-form-item  prop="roles" label="Role">
               <el-checkbox
                 v-model="checkAll"
                 :indeterminate="isIndeterminate"
                 border
-                @change="handleCheckAllChange"
+                @change="handleCheckAll"
+               
               >
-                Check all
+                Check All
               </el-checkbox>
             </el-form-item>
-            <el-tabs>
-              <el-form-item>
-                <template
-                  v-for="(item, index) in roleOpts.data"
-                  :key="index"
-                >
-                  <el-tab-pane :label="item._id">
-                    <fieldset
-                      v-for="modName in item.module"
-                      :key="modName.module"
-                      class="ra-fieldset shadow-sm antialiased"
+            <el-form-item>
+              <fieldset class="ra-fieldset antialiased shadow-sm">
+                <legend>Role</legend>
+                <el-row :gutter="20">
+                  <el-col
+                    :xs="24"
+                    :sm="24"
+                    :md="12"
+                    :lg="8"
+                    :xl="8"
+                    v-for="(role, idx) in roleGroupOpts"
+                    :key="idx"
+                  >
+                    <el-checkbox-group
+                      v-model="form.roles"
+                      @change="handleCheckRole"
                     >
-                      <legend>
-                        <b>{{ modName.module }}</b>
-                      </legend>
-                      <el-checkbox-group
-                        v-model="form.roles"
-                        v-loading="loadingRole"
-                        @change="handleCheckedRolesChange"
-                      >
-                        <el-row :gutter="20">
-                          <template
-                            v-for="list in modName.title"
-                            :key="list.label"
-                          >
-                            <el-col
-                              :xs="24"
-                              :sm="24"
-                              :md="12"
-                              :lg="8"
-                              :xl="8"
-                            >
-                              <el-checkbox :label="list.label">
-                                <span
-                                  class="break-words antialiased md:break-all sm:break-all"
-                                >
-                                  {{ startCase(list.label) }}
-                                </span>
-                                <el-tooltip
-                                  v-if="list.label == 'hide-profit-loss-amount'"
-                                  content="Hide Margin,Markup and Gross Profit on report"
-                                  placement="top"
-                                  effect="light"
-                                >
-                                  <el-icon :size="15">
-                                    <InfoFilled />
-                                  </el-icon>
-                                </el-tooltip>
-                                <el-tooltip
-                                  v-if="list.label == 'hide-cost-on-form'"
-                                  content="Hide Cost and Avg Cost on Form"
-                                  placement="top"
-                                  effect="light"
-                                >
-                                  <el-icon :size="15">
-                                    <InfoFilled />
-                                  </el-icon>
-                                </el-tooltip>
-                                <el-tooltip
-                                  v-if="list.label == 'hide-cost-on-report'"
-                                  content="Hide Cost and Avg Cost on Report"
-                                  placement="top"
-                                  effect="light"
-                                >
-                                  <el-icon :size="15">
-                                    <InfoFilled />
-                                  </el-icon>
-                                </el-tooltip>
-                              </el-checkbox>
-                            </el-col>
-                          </template>
-                        </el-row>
-                      </el-checkbox-group>
-                    </fieldset>
-                  </el-tab-pane>
-                </template>
-              </el-form-item>
-            </el-tabs>
+                      <el-checkbox :label="role.name">
+                        {{ startCase(role.name) }}
+                      </el-checkbox>
+                    </el-checkbox-group>
+                  </el-col>
+                </el-row>
+              </fieldset>
+              {{ roleOpts }}
+            </el-form-item>
           </el-col>
+          <!-- <el-col :span="12">
+            <el-form-item label="Username" prop="username">
+              <el-input v-model="form.username" />
+            </el-form-item>
+            <el-form-item label="Full Name" prop="fullName">
+              <el-input v-model="form.fullName" />
+            </el-form-item>
+            <el-form-item label="Email" prop="email">
+              <el-input v-model="form.email" />
+            </el-form-item>
+            <el-form-item label="Password" prop="password">
+              <el-input type="password" v-model="form.password" />
+            </el-form-item>
+            <el-form-item label="Status" prop="status">
+              <el-radio-group v-model="form.status">
+                <el-radio
+                  v-for="item in statusOpts"
+                  :key="item.value"
+                  :label="item.value"
+                />
+              </el-radio-group>
+            </el-form-item>
+          </el-col> -->
         </el-row>
       </el-form>
-
       <template #footer>
-        <span>
-          <el-button
-            type="primary"
-            @click="submitForm"
-          >
-            {{ $t('app.btn.save') }}
-          </el-button>
-          <el-button
-            v-if="formType === 'Edit'"
-            type="danger"
-            @click="remove"
-          >
-            {{ $t('app.btn.delete') }}
-          </el-button>
-          <el-button @click="handleModalClose">
-            {{ $t('app.btn.cancel') }}
-          </el-button>
-        </span>
+        <el-button type="primary" @click="onSubmit()">
+          <template #icon>
+            <i class="fas fa-save"></i>
+          </template>
+          Save</el-button
+        >
+        <el-button @click="handleModalClose"> Cancel</el-button>
+        <!-- <el-button type="danger">
+            <template #icon>
+                <i class="fas fa-trash"></i>
+            </template>
+            Remove</el-button> -->
       </template>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { startCase, toUpper, clone, cloneDeep, pick } from 'lodash'
-
-// Methods
-import {
-  findOneRoleGroup,
-  insertRoleGroup,
-  updateRoleGroup,
-  removeRoleGroup,
-  checkRoleGroupIsUsed,
-} from '../../../api/roles/methods'
-
-// Components
-import { InfoFilled } from '@element-plus/icons-vue'
-import {
-  ElDialog,
-  ElForm,
-  ElFormItem,
-  ElInput,
-  ElCheckbox,
-  ElCheckboxGroup,
-  ElTabs,
-  ElTabPane,
-  ElRadio,
-  ElRadioGroup,
-  ElRow,
-  ElCol,
-  ElButton,
-  ElTooltip,
-  ElIcon,
-} from 'element-plus'
-
+import { cloneDeep, map, startCase } from "lodash";
+import role from "../../role";
 export default {
-  name: 'RoleGroupForm',
-  components: {
-    [ElDialog.name]: ElDialog,
-    [ElForm.name]: ElForm,
-    [ElFormItem.name]: ElFormItem,
-    [ElInput.name]: ElInput,
-    [ElCheckbox.name]: ElCheckbox,
-    [ElCheckboxGroup.name]: ElCheckboxGroup,
-    [ElTabs.name]: ElTabs,
-    [ElTabPane.name]: ElTabPane,
-    [ElRadio.name]: ElRadio,
-    [ElRadioGroup.name]: ElRadioGroup,
-    [ElRow.name]: ElRow,
-    [ElCol.name]: ElCol,
-    [ElButton.name]: ElButton,
-    [ElTooltip.name]: ElTooltip,
-    [ElIcon.name]: ElIcon,
-    [InfoFilled.name]: InfoFilled,
-  },
+  name: "RoleGroupForm",
+  name: "RoleGroupForm",
   props: {
-    formType: {
-      type: String,
-      default: 'New',
-    },
     visible: {
       type: Boolean,
-      default: false,
+      defaults: () => false,
     },
-    updateDoc: {
-      type: Object,
-      default: null,
+    showId: {
+      type: String,
+      default: () => "",
     },
   },
   data() {
-    var validateName = (rule, value, callback) => {
-      if (value) {
-        findOneRoleGroup
-          .callPromise({
-            selector: {
-              _id: {
-                $ne: this.updateDoc && this.updateDoc._id,
-              },
-              name: value,
-            },
-          })
-          .then((result) => {
-            if (result) {
-              callback(new Error('Name is exist'))
-            } else {
-              callback()
-            }
-          })
-          .catch((err) => {
-            this.$store.dispatch('app/messageE', err)
-          })
-      }
-    }
-
     return {
-      loading: false,
-      loadingRole: false,
-      loopLength: 0,
-      renderEl: '',
-      // Check all
-      checkAll: false,
-      isIndeterminate: false,
-
       form: {
-        name: '',
+        name: "",
         roles: [],
-        status: 'Active',
+        status: "Active",
       },
+      role: role,
+      statusOpts: [
+        { label: "Active", value: "Active" },
+        { label: "Inactive", value: "Inactive" },
+      ],
       rules: {
         name: [
-          { required: true, message: 'Name is required' },
-          { validator: validateName, trigger: 'blur' },
+          { required: true, message: "Name is required" },
+          // { validator: validateName, trigger: 'blur' },
         ],
-        roles: [{ required: true, message: 'Roles name is required' }],
-        status: [{ required: true, message: 'Status is required' }],
+        roles: [{ required: true, message: "Roles name is required" }],
+        status: [{ required: true, message: "Status is required" }],
       },
-    }
+      isIndeterminate: false,
+      checkAll: false,
+    };
   },
   computed: {
-    roleOpts() {
-      // Authorize report
-      const authorizeList = this.$store.state.app.lookup.authorizes
-      const roleOpts = cloneDeep(this.$store.state.app.lookup.userRole) || {}
-
-      if (roleOpts.data && roleOpts.data.length) {
-        roleOpts.data.forEach((obj) => {
-          obj.module.forEach((mod) => {
-            if (mod.module == 'Account Form') {
-              authorizeList.forEach((it) => {
-                roleOpts.tmp.push({
-                  name: it['name'],
-                  value: `${it['level']}-`,
-                })
-                mod.title.push({ label: it['name'], value: `${it['level']}-` })
-              })
-            }
-          })
-        })
-      }
-      //console.log('roleOpts', roleOpts)
-      return roleOpts
+    roleGroupOpts() {
+      return this.role;
     },
-    statusOpts() {
-      return this.$store.state.app.lookup.status
+    roleOpts() {
+      const roleOpts = cloneDeep(this.$store.state.app.lookup.userRole) || {};
     },
   },
   watch: {
-    updateDoc: {
-      immediate: true,
+    showId: {
       handler: function (val) {
-        if (this.formType == 'Edit') {
-          this.form = val
-        } else {
-          this.form = {
-            name: '',
-            roles: [],
-            status: 'Active',
-          }
+        if (val) {
+          Meteor.callAsync("app.findOneRoleGroup", { selector: { _id: val } })
+            .then((res) => {
+              this.form = res;
+
+              this.$nextTick(() => {
+                this.handleCheckRole(res.roles);
+              });
+            })
+            .catch((err) => console.log(err));
         }
       },
+      immediate: true,
       deep: true,
     },
   },
-  mounted() {
-    this.lookupRole()
-  },
   methods: {
-    toUpper(value) {
-      return toUpper(value)
-    },
-    startCase(value) {
-      return startCase(clone(value))
-    },
     lookupRole() {
-      this.loading = true
+      this.loading = true;
       this.$store
-        .dispatch('app/lookup/getUserRole', {})
+        .dispatch("app/lookup/getUserRole", {})
         .then(() => {
-          this.loading = false
+          // this.loading = false
         })
         .catch((err) => {
-          this.loading = false
-          this.$store.dispatch('app/messageE', err)
-        })
+          // this.loading = false
+          // this.$store.dispatch('app/messageE', err)
+        });
     },
-    // Check all
-    handleCheckAllChange(val) {
-      this.form.roles = val ? this.roleOpts.tmp.map((o) => o.name) : []
-      this.isIndeterminate = false
-    },
-    handleCheckedRolesChange(value) {
-      const checkedCount = value.length
-      this.checkAll = checkedCount === this.roleOpts.tmp.length
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.roleOpts.tmp.length
-    },
-    // Submit form
-    submitForm() {
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          this.loading = true
-          if (this.formType === 'New') {
-            insertRoleGroup
-              .callPromise(this.form)
-              .then((result) => {
-                if (result) {
-                  this.loading = false
-                  this.$store.dispatch(
-                    'app/messageS',
-                    `Group ${this.form.name} saved`
-                  )
-                  this.resetForm()
-                }
-              })
-              .catch((err) => {
-                this.loading = false
-                this.$store.dispatch('app/messageE', err)
-              })
-          } else {
-            // Pick data
-            const doc = pick(this.form, ['_id', 'name', 'roles', 'status'])
-            updateRoleGroup
-              .callPromise(doc)
-              .then((result) => {
-                if (result) {
-                  this.loading = false
-                  this.$store.dispatch(
-                    'app/messageS',
-                    `Group ${this.form.name} saved`
-                  )
-                  this.handleModalClose()
-                }
-              })
-              .catch((err) => {
-                this.loading = false
-                this.$store.dispatch('app/messageE', err)
-              })
-          }
-        } else {
-          return false
-        }
-      })
-    },
-    remove() {
-      this.loading = true
-
-      const _id = this.updateDoc && this.updateDoc._id
-      const selector = { 'profile.roleGroup': _id }
-      checkRoleGroupIsUsed
-        .callPromise({ selector })
-        .then((result) => {
-          this.loading = false
-          if (result) {
-            this.$store.dispatch(
-              'app/messageE',
-              `Group ${this.form.name} has been used`
-            )
-          } else {
-            this.$store
-              .dispatch('app/confirm', {
-                messageType: 'Delete',
-                item: this.form.name,
-              })
-              .then(() => {
-                this.loading = true
-
-                removeRoleGroup
-                  .callPromise({ _id: this.updateDoc._id })
-                  .then((res) => {
-                    this.loading = false
-                    this.handleModalClose()
-                    this.$store.dispatch(
-                      'app/messageS',
-                      `Group ${this.form.name} deleted`
-                    )
-                  })
-                  .catch((err) => {
-                    this.loading = false
-                    this.$store.dispatch('app/messageE', err)
-                  })
-              })
-          }
-        })
-        .catch((err) => {
-          this.loading = false
-          this.$store.dispatch('app/messageE', err)
-        })
-    },
-
-    resetForm() {
-      this.$refs['form'].resetFields()
+    startCase(val) {
+      return startCase(val);
     },
     handleModalClose() {
-      this.$emit('modal-close')
+      this.$emit("modal-close");
+    },
+    handleCheckAll(val) {
+      this.form.roles = val ? map(this.role, (o) => o.name) : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckRole(value) {
+      if (value.length === this.role.length) {
+        this.checkAll = true;
+        this.indeterminate = true;
+      } else {
+        this.checkAll = false;
+        this.indeterminate = false;
+      }
+    },
+    async onSubmit() {
+      this.$refs["formRef"].validate((valid) => {
+        if (valid) {
+          let methods = "app.insertRoleGroup";
+          if (this.showId) {
+            methods = "app.updateRoleGroup";
+          }
+          Meteor.callAsync(methods, this.form).then((res) => {
+            this.handleModalClose();
+            this.$message({
+              type: "success",
+              message: this.showId
+                ? "Updated Role Group"
+                : "Created Role Group",
+            });
+          });
+        } else {
+          return false;
+        }
+      });
     },
   },
-}
+  mounted() {
+    this.lookupRole();
+  },
+};
 </script>
 
-<style
-  lang="scss"
-  scoped
->
-.content {
-  height: calc(100vh - 350px);
-}
-</style>

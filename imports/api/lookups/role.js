@@ -132,6 +132,9 @@ export const lookupRole = new ValidatedMethod({
         return !!doc._id
       })
 
+      console.log('Role Data', roleData);
+
+
       return roleData
     }
   },
@@ -165,3 +168,5 @@ export const lookupRoleGroup = new ValidatedMethod({
 rateLimit({
   methods: [],
 })
+
+export { lookupRole, lookupRoleGroup };
