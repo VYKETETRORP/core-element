@@ -196,8 +196,8 @@ export default {
           // this.loading = false
         })
         .catch((err) => {
-          // this.loading = false
-          // this.$store.dispatch('app/messageE', err)
+          this.loading = false
+          this.$store.dispatch('app/messageE', err)
         });
     },
     startCase(val) {
@@ -228,21 +228,28 @@ export default {
           }
           Meteor.callAsync(methods, this.form).then((res) => {
             this.handleModalClose();
-            this.$message({
-              type: "success",
-              message: this.showId
-                ? "Updated Role Group"
-                : "Created Role Group",
-            });
+            // this.$message({
+            //   type: "success",
+            //   message: this.showId
+            //     ? "Updated Role Group"
+            //     : "Created Role Group",
+            // });
+
+            this.$store.dispatch(
+                    'app/messageS',
+                    `Group ${this.form.name} saved`
+                  )
+
           });
         } else {
+          // this.$store.dispatch('app/messageE', err)
           return false;
         }
       });
     },
   },
   mounted() {
-    this.lookupRole();
+    // this.lookupRole();
   },
 };
 </script>

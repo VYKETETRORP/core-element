@@ -165,8 +165,8 @@ export default {
     addNew() {
       this.formType = "New";
       this.currentModal = "RoleGroupForm";
-      this.nextTick(() => {
-        showId.value = row._id;
+      this.$nextTick(() => {
+        this.modalVisible = true
       });
     },
 
@@ -197,7 +197,8 @@ export default {
     
         // Optionally, update your data or perform any other necessary actions after successful removal
         // this.getData(tableData.value.length === 1);
-        Notify.success({ message: 'Deleted!' })
+        // Notify.success({ message: 'Deleted!' })
+        Msg.success('Deleted!')
         this.getData();
       } catch (error) {
         // Handle errors if the removal fails

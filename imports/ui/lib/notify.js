@@ -7,7 +7,7 @@ const Notify = {
 
     Notification({
       type: "success",
-      position: "bottom-right",
+      position: "middle",
       title,
       message,
     });
