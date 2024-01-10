@@ -121,8 +121,13 @@
         <el-menu default-active="1">
           <el-menu-item index="0">
             <div class="avatar-wrapper">
-              <el-avatar size="default"></el-avatar>
+              <avatar
+              :username="FullName"
+              :size="40"
+            />
+
             </div>
+           
             <div class="content">
               <span>
                 <p v-if="currentUser">{{ currentUser.profile.fullName }}</p>
@@ -148,6 +153,7 @@ import { useStore } from "vuex";
 import { findIndex, map, without } from "lodash";
 import useAuth from "../composables/useAuth";
 import { sidebarMenu } from "/imports/navmenu";
+import Avatar from "../components/Avatar.vue";
 
 import { findOneRoleGroup } from "../../api/roles/methods";
 
@@ -158,12 +164,11 @@ const store = useStore();
 const route = useRoute();
 
 const router = useRouter();
-
+ 
 const currentUser = computed(() => store.state.app.currentUser);
 
 // const userFullName = computed(()=>store.getters["app/userFullName"]);
-const userFullName = computed(() => store.getters["app/userFullName"]);
-
+// const FullName = computed(() => store.getters["app/FullName"]);
 const defaultActive = computed(() => route.name || "Dashboard");
 
 const isCollapse = computed(() => store.getters["app/sidebar/isCollapse"]);
@@ -176,6 +181,7 @@ const activeChildIndex = computed(
 // const currentUser = computed(() => store.getters["app/currentUser"]);
 
 const linkActive = computed(() => store.state.app.tagView.linkActive);
+const FullName = currentUser.profile.fullName;
 
 const menu = ref<any[]>([
   {
