@@ -128,8 +128,7 @@
                 <p v-if="currentUser">{{ currentUser.profile.fullName }}</p>
                 <p v-else>Unknown</p></span
               >
-              <span>{{ currentUser?.profile.roleGroup }} </span>
-              
+              <span>{{ roleGroupName }}</span>
             </div>
             <div class="logout-wrapper">
               <el-button :loading="loading" class="logout-btn" @click="logout">
@@ -143,14 +142,14 @@
   </el-aside>
 </template>
 <script lang="ts" setup>
-import { computed, ref, watch,onMounted } from "vue";
+import { computed, ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { findIndex, map, without } from "lodash";
 import useAuth from "../composables/useAuth";
 import { sidebarMenu } from "/imports/navmenu";
 
-import { findOneRoleGroup } from '../../api/roles/methods'
+import { findOneRoleGroup } from "../../api/roles/methods";
 
 // const { loading, logout }  = useAuth();
 const { loading } = useAuth();
@@ -212,30 +211,28 @@ const logout = () => {
     });
 };
 
-
-
 const roleGroupName = ref<string | null>(null);
 const currentUserProfile = ref<any>(null); // Adjust the type based on your actual user profile structure
 
-
 const getUserRoleGroup = async () => {
-  if (currentUserProfile.value?.roleGroup === 'super') {
-    roleGroupName.value = 'Super';
-    return;
-  }
+  if (currentUser.value) {
+    const userRoleGroup = currentUser.value.profile?.roleGroup;
 
-  const roleGroupId = currentUserProfile.value?.roleGroup || null;
-  if (!roleGroupId) {
-    roleGroupName.value = null;
-    return;
-  }
+    if (userRoleGroup === "super") {
+      roleGroupName.value = "Super";
+      return;
+    }
 
-  try {
-    const result = await findOneRoleGroup.callPromise({ selector: { _id: roleGroupId } });
-    roleGroupName.value = result?.name || null;
-  } catch (error) {
-    // Assuming Notify is a global object or imported from a notification library
-    Notify.error({ message: error });
+    if (userRoleGroup) {
+      try {
+        const result = await findOneRoleGroup.callPromise({
+          selector: { _id: userRoleGroup },
+        });
+        roleGroupName.value = result?.name || null;
+      } catch (error) {
+        console.error("Error fetching role group:", error);
+      }
+    }
   }
 };
 

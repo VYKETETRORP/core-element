@@ -33,7 +33,7 @@
           <span
             v-if="title.prop === 'name'"
             class="ra-text-link"
-            @click="edit(scope.row)"
+            
           >
             {{ scope.row.name }}
           </span>
