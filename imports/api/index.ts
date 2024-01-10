@@ -6,5 +6,5 @@ import "./users/server";
 import "./roles/server";
 import "./auditLogs/server"
 
-// import "./lookups";
+import "./lookups";
 import "./validations";

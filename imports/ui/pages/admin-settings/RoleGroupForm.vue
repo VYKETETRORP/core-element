@@ -249,7 +249,7 @@ export default {
     },
   },
   mounted() {
-    // this.lookupRole();
+    this.lookupRole();
   },
 };
 </script>
