@@ -1,206 +1,273 @@
-<template>
+<template class="kh-battambang">
   <div
-    class="vue-avatar--wrapper"
-    :style="[style, customStyle]"
-    aria-hidden="true"
+    :style="{
+      color: displayColor,
+      width: size + 'px',
+      height: size + 'px',
+      fontSize: fontSize + 'px',
+      background: displayBackground,
+      display: inline && 'inline-flex',
+      borderRadius: rounded && '50%',
+    }"
+    class="avatar noselect"
   >
-    <img v-if="isImage" style="display: none" :src="src" @error="onImgError" />
-    <span v-show="!isImage">{{ userInitial }}</span>
+    {{ displayName }}
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, computed, onMounted } from 'vue'
-
-const getInitials = (username) => {
-  let parts = username.split(/[ -]/)
-  let initials = ''
-
-  for (let i = 0; i < parts.length; i++) {
-    initials += parts[i].charAt(0)
-  }
-
-  if (initials.length > 3 && initials.search(/[A-Z]/) !== -1) {
-    initials = initials.replace(/[a-z]+/g, '')
-  }
-
-  initials = initials.substr(0, 3).toUpperCase()
-
-  return initials
-}
-
-export default defineComponent({
+const lightColors = [
+  "#F0F8FF",
+  "#FAEBD7",
+  "#00FFFF",
+  "#7FFFD4",
+  "#F0FFFF",
+  "#F5F5DC",
+  "#FFE4C4",
+  "#FFEBCD",
+  "#DEB887",
+  "#5F9EA0",
+  "#7FFF00",
+  "#D2691E",
+  "#FF7F50",
+  "#6495ED",
+  "#FFF8DC",
+  "#00FFFF",
+  "#B8860B",
+  "#A9A9A9",
+  "#A9A9A9",
+  "#BDB76B",
+  "#FF8C00",
+  "#E9967A",
+  "#8FBC8F",
+  "#00CED1",
+  "#FF1493",
+  "#00BFFF",
+  "#1E90FF",
+  "#FFFAF0",
+  "#FF00FF",
+  "#DCDCDC",
+  "#F8F8FF",
+  "#FFD700",
+  "#DAA520",
+  "#808080",
+  "#808080",
+  "#ADFF2F",
+  "#F0FFF0",
+  "#FF69B4",
+  "#CD5C5C",
+  "#FFFFF0",
+  "#F0E68C",
+  "#E6E6FA",
+  "#FFF0F5",
+  "#7CFC00",
+  "#FFFACD",
+  "#ADD8E6",
+  "#F08080",
+  "#E0FFFF",
+  "#FAFAD2",
+  "#D3D3D3",
+  "#D3D3D3",
+  "#90EE90",
+  "#FFB6C1",
+  "#FFA07A",
+  "#20B2AA",
+  "#87CEFA",
+  "#B0C4DE",
+  "#FFFFE0",
+  "#00FF00",
+  "#32CD32",
+  "#FAF0E6",
+  "#FF00FF",
+  "#66CDAA",
+  "#BA55D3",
+  "#9370D8",
+  "#3CB371",
+  "#7B68EE",
+  "#00FA9A",
+  "#48D1CC",
+  "#F5FFFA",
+  "#FFE4E1",
+  "#FFE4B5",
+  "#FFDEAD",
+  "#FDF5E6",
+  "#FFA500",
+  "#FF4500",
+  "#DA70D6",
+  "#EEE8AA",
+  "#98FB98",
+  "#AFEEEE",
+  "#D87093",
+  "#FFEFD5",
+  "#FFDAB9",
+  "#CD853F",
+  "#FFC0CB",
+  "#DDA0DD",
+  "#B0E0E6",
+  "#FF0000",
+  "#BC8F8F",
+  "#FA8072",
+  "#F4A460",
+  "#FFF5EE",
+  "#C0C0C0",
+  "#87CEEB",
+  "#FFFAFA",
+  "#00FF7F",
+  "#D2B48C",
+  "#D8BFD8",
+  "#FF6347",
+  "#40E0D0",
+  "#EE82EE",
+  "#F5DEB3",
+  "#FFFFFF",
+  "#F5F5F5",
+  "#FFFF00",
+  "#9ACD32",
+];
+const darkColors = [
+  "#000000",
+  "#0000FF",
+  "#8A2BE2",
+  "#A52A2A",
+  "#DC143C",
+  "#00008B",
+  "#008B8B",
+  "#006400",
+  "#8B008B",
+  "#556B2F",
+  "#9932CC",
+  "#8B0000",
+  "#483D8B",
+  "#2F4F4F",
+  "#2F4F4F",
+  "#9400D3",
+  "#696969",
+  "#696969",
+  "#B22222",
+  "#228B22",
+  "#008000",
+  "#4B0082",
+  "#800000",
+  "#0000CD",
+  "#C71585",
+  "#191970",
+  "#000080",
+  "#808000",
+  "#6B8E23",
+  "#800080",
+  "#4169E1",
+  "#8B4513",
+  "#2E8B57",
+  "#A0522D",
+  "#6A5ACD",
+  "#708090",
+  "#708090",
+  "#4682B4",
+  "#008080",
+];
+export default {
+  name: "Avatar",
   props: {
-    username: {
+    name: {
       type: String,
-    },
-    initials: {
-      type: String,
-    },
-    backgroundColor: {
-      type: String,
+      required: true,
     },
     color: {
       type: String,
     },
-    customStyle: {
-      type: Object,
-    },
-    inline: {
-      type: Boolean,
+    background: {
+      type: String,
     },
     size: {
       type: Number,
-      default: 50,
     },
-    src: {
-      type: String,
+    inverted: {
+      type: Boolean,
+      default: false,
+    },
+    inline: {
+      type: Boolean,
+      default: false,
     },
     rounded: {
       type: Boolean,
       default: true,
     },
-    lighten: {
-      type: Number,
-      default: 80,
-    },
-    parser: {
-      type: Function,
-      default: getInitials,
-      validator: (parser) => typeof parser('John', getInitials) === 'string',
-    },
   },
-  setup(props, { emit }) {
-    const backgroundColors = [
-      '#F44336',
-      '#FF4081',
-      '#9C27B0',
-      '#673AB7',
-      '#3F51B5',
-      '#2196F3',
-      '#03A9F4',
-      '#00BCD4',
-      '#009688',
-      '#4CAF50',
-      '#8BC34A',
-      '#CDDC39',
-      /* '#FFEB3B' , */ '#FFC107',
-      '#FF9800',
-      '#FF5722',
-      '#795548',
-      '#9E9E9E',
-      '#607D8B',
-    ]
-
-    const imgError = ref(false)
-
-    const onImgError = (evt) => {
-      imgError.value = true
-    }
-
-    const randomBackgroundColor = (seed, colors) => {
-      return colors[seed % colors.length]
-    }
-
-    const lightenColor = (hex, amt) => {
-      // From https://css-tricks.com/snippets/javascript/lighten-darken-color/
-      let usePound = false
-
-      if (hex[0] === '#') {
-        hex = hex.slice(1)
-        usePound = true
-      }
-
-      let num = parseInt(hex, 16)
-      let r = (num >> 16) + amt
-
-      if (r > 255) r = 255
-      else if (r < 0) r = 0
-
-      let b = ((num >> 8) & 0x00ff) + amt
-
-      if (b > 255) b = 255
-      else if (b < 0) b = 0
-
-      let g = (num & 0x0000ff) + amt
-
-      if (g > 255) g = 255
-      else if (g < 0) g = 0
-
-      return (usePound ? '#' : '') + (g | (b << 8) | (r << 16)).toString(16)
-    }
-
-    // Computed
-    const isImage = computed(() => {
-      return !imgError.value && !!props.src
-    })
-
-    const userInitial = computed(() => {
-      if (!isImage.value) {
-        const initials =
-          props.initials || props.parser(props.username, getInitials)
-        return initials
-      }
-      return ''
-    })
-
-    const background = computed(() => {
-      if (!isImage.value) {
+  computed: {
+    fontSize() {
+      const size = this.size || 40;
+      if (this.displayName.length == 1) return size / 2;
+      else if (this.displayName.length == 2) return size / 2.5;
+      if (this.displayName.length == 3) return size / 3;
+      else return 14;
+    },
+    displayName() {
+      let words = this.name.trim().split(/[- ]/);
+      words = words.filter((word) => word !== "");
+      if (words.length >= 3)
         return (
-          props.backgroundColor ||
-          randomBackgroundColor(props.username.length, backgroundColors)
-        )
-      }
-    })
-
-    const fontColor = computed(() => {
-      if (!isImage.value) {
-        return props.color || lightenColor(background.value, props.lighten)
-      }
-    })
-
-    const style = computed(() => {
-      const style = {
-        display: props.inline ? 'inline-flex' : 'flex',
-        width: `${props.size}px`,
-        height: `${props.size}px`,
-        borderRadius: props.rounded ? '50%' : 0,
-        lineHeight: `${props.size + Math.floor(props.size / 20)}px`,
-        fontWeight: 'bold',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        userSelect: 'none',
-      }
-
-      const imgBackgroundAndFontStyle = {
-        background: `transparent url('${props.src}') no-repeat scroll 0% 0% / ${props.size}px ${props.size}px content-box border-box`,
-      }
-
-      const initialBackgroundAndFontStyle = {
-        backgroundColor: background.value,
-        font: `${Math.floor(props.size / 2.5)}px/${
-          props.size
-        }px Helvetica, Arial, sans-serif`,
-        color: fontColor.value,
-      }
-
-      const backgroundAndFontStyle = isImage.value
-        ? imgBackgroundAndFontStyle
-        : initialBackgroundAndFontStyle
-
-      Object.assign(style, backgroundAndFontStyle)
-
-      return style
-    })
-
-    onMounted(() => {
-      if (!isImage.value) {
-        emit('avatar-initials', props.username, userInitial.value)
-      }
-    })
-
-    return { isImage, style, userInitial, onImgError }
+          words[0][0].toUpperCase() +
+          words[1][0].toUpperCase() +
+          words[words.length - 1][0].toUpperCase()
+        );
+      else if (words.length == 2)
+        return words[0][0].toUpperCase() + words[1][0].toUpperCase();
+      else if (words.length == 1) return words[0][0].toUpperCase();
+      else return "";
+    },
+    displayBackground() {
+      return this.background
+        ? this.background
+        : this.inverted
+        ? this.lightColor
+        : this.darkColor;
+    },
+    displayColor() {
+      return this.color
+        ? this.color
+        : this.inverted
+        ? this.darkColor
+        : this.lightColor;
+    },
+    asciiValue() {
+      const username = this.name.trim();
+      let ascii = 0;
+      for (let index = 0; index < username.length; index++)
+        ascii += username.charCodeAt(index);
+      return ascii;
+    },
+    darkColor() {
+      return darkColors[this.asciiValue % darkColors.length];
+    },
+    lightColor() {
+      return lightColors[this.asciiValue % lightColors.length];
+    },
   },
-})
+};
 </script>
+
+<style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Domine:wght@700&display=swap");
+.avatar {
+  /* font-family: "Domine", serif; */
+  color: white;
+  background: navy;
+  font-size: 14px;
+  width: 45px;
+  height: 45px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+</style>
