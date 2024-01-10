@@ -2,7 +2,8 @@ import { Meteor } from "meteor/meteor";
 import { ValidatedMethod } from "meteor/mdg:validated-method";
 import { CallPromiseMixin } from "meteor/didericis:callpromise-mixin";
 import SimpleSchema from "simpl-schema";
-import RoleGroups from "../roles/roleGroup";
+// import RoleGroups from "../roles/roleGroup";
+import Roles from "../roles/roles"
 
 // Group
 export const lookupRole = new ValidatedMethod({
@@ -19,7 +20,7 @@ export const lookupRole = new ValidatedMethod({
     if (Meteor.isServer) {
       selector = selector || {};
 
-      let data = RoleGroups.find(selector, { sort: { name: 1 } });
+      let data = Roles.find(selector, { sort: { name: 1 } });
       let list = data.map((o) => {
         return { label: o.name, value: o._id, doc: o };
       });

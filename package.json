@@ -26,6 +26,7 @@
     "less": "^4.2.0",
     "meteor-node-stubs": "^1.2.1",
     "moment": "^2.29.4",
+    "mongoose": "^6.3.0",
     "session": "^0.1.0",
     "simpl-schema": "^3.4.1",
     "vue": "^3.2.45",

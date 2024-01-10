@@ -12,7 +12,7 @@
       <el-col :span="colSpan.filter" :offset="colSpanOffset" class="text-right">
         <!-- Filter -->
         <slot name="filter">
-          <el-input v-model="filter" />
+          <el-input placeholder="Search..." v-model="filter" />
         </slot>
       </el-col>
     </el-row>

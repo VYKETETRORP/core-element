@@ -3,10 +3,11 @@
     <!--Modal Form-->
     <component
       :is="currentModal"
-      :form-type="formType"
+  
       :update-doc="updateDoc"
       :visible="modalVisible"
       @modal-close="handleModalClose"
+      :show-id="showId"
     />
 
     <!-- Toolbar -->
@@ -111,6 +112,7 @@ export default {
     return {
       loading: false,
       formType: "New",
+      showId:null,
       tableData: [],
       tableTitles: [
         // { label: 'ID', prop: '_id' },
@@ -172,11 +174,14 @@ export default {
 
     // Table Action
     handleEdit(row) {
-      this.formType = "Edit";
+      // this.formType = "Edit";
       this.updateDoc = row;
       this.currentModal = "RoleGroupForm";
+    this.modalVisible = true;
       this.$nextTick(() => {
-        this.modalVisible = true;
+    
+        this.showId = row._id;
+        console.log('show id',this.showId)
       });
     },
     // remove(row) {
@@ -210,6 +215,8 @@ export default {
     handleModalClose() {
       this.modalVisible = false;
       this.$nextTick(() => {
+
+        this.showId=null;
         this.currentModal = null;
         this.updateDoc = null;
         this.getData();

@@ -5,12 +5,13 @@
       width="70%"
       :before-close="handleModalClose"
     >
-      <template #header>
+    <template #header>
         <i :class="`fas fa-${showId ? 'pencil' : 'plus'}`"></i>
         <span class="ml-2">
           {{ showId ? "Edit User" : "Add Role Group" }}
         </span>
       </template>
+
       <el-form
         :model="form"
         ref="formRef"
@@ -74,7 +75,7 @@
                   </el-col>
                 </el-row>
               </fieldset>
-              {{ roleOpts }}
+          {{ roleOpts }}
             </el-form-item>
           </el-col>
           <!-- <el-col :span="12">
@@ -123,6 +124,16 @@
 <script>
 import { cloneDeep, map, startCase } from "lodash";
 import role from "../../role";
+
+import {
+  findOneRoleGroup,
+  insertRoleGroup,
+  updateRoleGroup,
+  removeRoleGroup,
+  checkRoleGroupIsUsed,
+} from '../../../api/roles/methods'
+
+
 export default {
   name: "RoleGroupForm",
   name: "RoleGroupForm",
@@ -133,8 +144,22 @@ export default {
     },
     showId: {
       type: String,
-      default: () => "",
+      default: () => null,
     },
+    formType: {
+      type: String,
+      default: () => "New",
+    },
+
+    visible: {
+      type: Boolean,
+      default: false,
+    },
+    updateDoc: {
+      type: Object,
+      default: null,
+    },
+
   },
   data() {
     return {
@@ -186,14 +211,18 @@ export default {
       immediate: true,
       deep: true,
     },
+
+ 
+
   },
   methods: {
     lookupRole() {
       this.loading = true;
       this.$store
         .dispatch("app/lookup/getUserRole", {})
-        .then(() => {
+        .then((data) => {
           // this.loading = false
+          // console.log('data',data)
         })
         .catch((err) => {
           this.loading = false

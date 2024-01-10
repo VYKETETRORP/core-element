@@ -54,7 +54,7 @@ import AreaChart from "../components/dashboard/AreaChart.vue";
 </template>
 
 <style lang="scss" scoped>
-@import "./imports/client/styles/main.scss";
+@import ".././styles/main.scss";
 
 
 .title {

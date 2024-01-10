@@ -6,5 +6,5 @@ export default {
   lang: 'en',
   currentUser: Meteor.user() || Session.get('currentUser'),
   currentBranch: Session.get('currentBranch'),
-  allowedBranches: Session.get('allowedBranches') || [],
+  // allowedBranches: Session.get('allowedBranches') || [],
 };
