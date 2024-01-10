@@ -5,10 +5,10 @@
       width="70%"
       :before-close="handleModalClose"
     >
-    <template #header>
-        <i :class="`fas fa-${showId ? 'pencil' : 'plus'}`"></i>
+      <template #header>
+        <i :class="`fa fa-${showId ? 'pencil-square-o' : 'plus'}`"></i>
         <span class="ml-2">
-          {{ showId ? "Edit User" : "Add Role Group" }}
+          {{ showId ? "Edit Role Group" : "Add Role Group" }}
         </span>
       </template>
 
@@ -40,13 +40,12 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item  prop="roles" label="Role">
+            <el-form-item prop="roles" label="Role">
               <el-checkbox
                 v-model="checkAll"
                 :indeterminate="isIndeterminate"
                 border
                 @change="handleCheckAll"
-               
               >
                 Check All
               </el-checkbox>
@@ -75,7 +74,7 @@
                   </el-col>
                 </el-row>
               </fieldset>
-          {{ roleOpts }}
+              {{ roleOpts }}
             </el-form-item>
           </el-col>
           <!-- <el-col :span="12">
@@ -131,8 +130,7 @@ import {
   updateRoleGroup,
   removeRoleGroup,
   checkRoleGroupIsUsed,
-} from '../../../api/roles/methods'
-
+} from "../../../api/roles/methods";
 
 export default {
   name: "RoleGroupForm",
@@ -159,9 +157,32 @@ export default {
       type: Object,
       default: null,
     },
-
   },
   data() {
+
+    var validateName = (rule, value, callback) => {
+      if (value) {
+        findOneRoleGroup
+          .callPromise({
+            selector: {
+              _id: {
+                $ne: this.updateDoc && this.updateDoc._id,
+              },
+              name: value,
+            },
+          })
+          .then((result) => {
+            if (result) {
+              callback(new Error('Name is exist'))
+            } else {
+              callback()
+            }
+          })
+          .catch((err) => {
+            this.$store.dispatch('app/messageE', err)
+          })
+      }
+    }
     return {
       form: {
         name: "",
@@ -176,7 +197,7 @@ export default {
       rules: {
         name: [
           { required: true, message: "Name is required" },
-          // { validator: validateName, trigger: 'blur' },
+          { validator: validateName, trigger: 'blur' },
         ],
         roles: [{ required: true, message: "Roles name is required" }],
         status: [{ required: true, message: "Status is required" }],
@@ -184,6 +205,8 @@ export default {
       isIndeterminate: false,
       checkAll: false,
     };
+
+   
   },
   computed: {
     roleGroupOpts() {
@@ -211,9 +234,6 @@ export default {
       immediate: true,
       deep: true,
     },
-
- 
-
   },
   methods: {
     lookupRole() {
@@ -225,8 +245,8 @@ export default {
           // console.log('data',data)
         })
         .catch((err) => {
-          this.loading = false
-          this.$store.dispatch('app/messageE', err)
+          this.loading = false;
+          this.$store.dispatch("app/messageE", err);
         });
     },
     startCase(val) {
@@ -257,6 +277,7 @@ export default {
           }
           Meteor.callAsync(methods, this.form).then((res) => {
             this.handleModalClose();
+
             // this.$message({
             //   type: "success",
             //   message: this.showId
@@ -264,11 +285,11 @@ export default {
             //     : "Created Role Group",
             // });
 
-            this.$store.dispatch(
-                    'app/messageS',
-                    `Group ${this.form.name} saved`
-                  )
+            const successMessage = this.showId
+              ? `Group ${this.form.name} updated`
+              : `Group ${this.form.name} created`;
 
+            this.$store.dispatch("app/messageS", successMessage);
           });
         } else {
           // this.$store.dispatch('app/messageE', err)
@@ -276,10 +297,11 @@ export default {
         }
       });
     },
+
+    
   },
   mounted() {
     this.lookupRole();
   },
 };
 </script>
-

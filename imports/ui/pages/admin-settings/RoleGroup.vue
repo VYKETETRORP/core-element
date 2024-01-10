@@ -214,9 +214,9 @@ export default {
 
     handleModalClose() {
       this.modalVisible = false;
+      this.showId=null;
       this.$nextTick(() => {
-
-        this.showId=null;
+       
         this.currentModal = null;
         this.updateDoc = null;
         this.getData();
