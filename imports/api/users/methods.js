@@ -123,7 +123,7 @@ export const updateUser = new ValidatedMethod({
               // expiryDay: user.expiryDay,
               // expiryDate: user.expiryDate,
               status: user.status,
-              allowedBranches: user.allowedBranches,
+              // allowedBranches: user.allowedBranches,
               roleGroup: user.roleGroup,
               roles: user.roles,
             },
