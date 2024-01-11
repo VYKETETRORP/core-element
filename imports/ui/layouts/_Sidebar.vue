@@ -121,7 +121,9 @@
         <el-menu default-active="1">
           <el-menu-item index="0">
             <div class="avatar-wrapper">
-              <Avatar name="Super" background="#1E90FF" />  
+              <Avatar
+                :username="userFullName"
+              :size="40" />  
 
             </div>
            
@@ -162,10 +164,16 @@ const route = useRoute();
 
 const router = useRouter();
  
+// const userFullName = computed(() => {
+//       return store.getters['app/userFullName'] || 'Unknown'
+//     })
+
+
+
+// const userFullName = computed(() => store.state.app.userFullName);
+
 const currentUser = computed(() => store.state.app.currentUser);
 
-const userFullName = computed(()=>store.getters["app/userFullName"]);
-// const FullName = computed(() => store.getters["app/FullName"]);
 const defaultActive = computed(() => route.name || "Dashboard");
 
 const isCollapse = computed(() => store.getters["app/sidebar/isCollapse"]);
@@ -177,8 +185,13 @@ const activeChildIndex = computed(
 );
 // const currentUser = computed(() => store.getters["app/currentUser"]);
 
+const currentUserProfile = ref(store.state.app.currentUser?.profile || {})
+
+const userFullName = computed(() => {
+  return currentUserProfile.value.fullName || 'Unknown'
+})
+
 const linkActive = computed(() => store.state.app.tagView.linkActive);
-// const FullName = currentUser.profile.fullName;
 
 const menu = ref<any[]>([
   {
@@ -215,7 +228,6 @@ const logout = () => {
 };
 
 const roleGroupName = ref<string | null>(null);
-const currentUserProfile = ref<any>(null); // Adjust the type based on your actual user profile structure
 
 const getUserRoleGroup = async () => {
   if (currentUser.value) {
