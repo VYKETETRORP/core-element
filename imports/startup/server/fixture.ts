@@ -7,14 +7,14 @@ Meteor.startup(async () => {
   if (!superAccount) {
 
     const user = {
-      username: 'keke',
-      email: 'super@rabbit.com',
+      username: 'cici',
+      email: 'cici@rabbit.com',
     
       password: '123456',
       profile: {
-        fullName: 'Super',
+        fullName: 'cici and yoyo',
         status: 'Active',  
-        "roles": ["super"]
+        "roles": ["test"]
    
       },   
     }
